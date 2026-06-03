@@ -241,6 +241,11 @@ function renderMembers() {
 function openMemberModal(id = null) {
   resetAndInitDropzone('dz-member', 'mImage');
   const m = id ? membersData.find(x => x.id === id) : {};
+  // Mostrar imagen actual en dropzone si existe
+  if (m?.image_url) {
+    const zone = document.getElementById('dz-member');
+    if (zone) showDropPreview(zone, m.image_url, 'imagen actual', m.image_url, 'drop-thumb');
+  }
   document.getElementById('mDbId').value       = m?.id || '';
   document.getElementById('mNick').value       = m?.nickname    || '';
   document.getElementById('mBadge').value      = m?.badge       || 'member';
@@ -320,6 +325,10 @@ function renderNews() {
 function openNewsModal(id = null) {
   resetAndInitDropzone('dz-news', 'nImg');
   const p = id ? newsData.find(x => x.id === id) : {};
+  if (p?.image_url) {
+    const zone = document.getElementById('dz-news');
+    if (zone) showDropPreview(zone, p.image_url, 'imagen actual', p.image_url, 'drop-thumb-square');
+  }
   document.getElementById('nDbId').value     = p?.id || '';
   document.getElementById('nChapter').value  = p?.chapter     || '';
   document.getElementById('nCategory').value = p?.category    || 'guild';
@@ -439,10 +448,11 @@ async function deleteGuide(id) {
 let galleryData = [];
 
 async function loadGallery() {
-  const { data } = await sb.from('content_gallery').select('*').where ?
-    await sb.from('content_gallery').select('*').eq('is_empty', false).order('sort_order') :
-    await sb.from('content_gallery').select('*').order('sort_order');
-  galleryData = (data || []).filter(i => !i.is_empty);
+  const { data } = await sb.from('content_gallery')
+    .select('*')
+    .eq('is_empty', false)
+    .order('sort_order');
+  galleryData = data || [];
   renderGallery();
 }
 
