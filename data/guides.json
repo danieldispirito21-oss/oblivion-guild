@@ -1,0 +1,37 @@
+{
+  "guides": [
+    {
+      "id": 1,
+      "game": "Throne and Liberty",
+      "gameShort": "TL",
+      "category": "Siege",
+      "title": "Cómo conquistar Stonegard",
+      "desc": "Las mecánicas del asedio de castillo en TL y cómo Oblivion organizó la toma de Stonegard. Coordinación, golems y posicionamiento.",
+      "author": "Corvo",
+      "date": "2024",
+      "content": "Próximamente..."
+    },
+    {
+      "id": 2,
+      "game": "Throne and Liberty",
+      "gameShort": "TL",
+      "category": "Build",
+      "title": "Build DPS — Dagger / Wand",
+      "desc": "La build de control y daño que Oblivion usó en los asedios de Grinwell. Habilidades, stats prioritarios y rotación.",
+      "author": "Corvo",
+      "date": "2024",
+      "content": "Próximamente..."
+    },
+    {
+      "id": 3,
+      "game": "General",
+      "gameShort": "Guild",
+      "category": "Reglas",
+      "title": "Código de la Guild",
+      "desc": "Lo que se espera de cada miembro de Oblivion. Lealtad, presencia en eventos y respeto al liderazgo.",
+      "author": "Oblivion",
+      "date": "2024",
+      "content": "Próximamente..."
+    }
+  ]
+}

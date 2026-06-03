@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leer — Oblivion Manga</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+  </style>
+</head>
+<body class="reader-body">
+
+  <!-- TOP BAR -->
+  <div class="reader-topbar">
+    <a href="index.html" class="reader-back">&#8592; Volver</a>
+    <span class="reader-chapter-title" id="chapterTitle">Cargando...</span>
+    <select class="reader-chapter-select" id="chapterSelect">
+      <!-- populated by JS -->
+    </select>
+  </div>
+
+  <!-- PAGE -->
+  <main class="reader-main" id="readerMain">
+    <img id="readerImg" class="reader-page-img" src="" alt="Página del manga">
+  </main>
+
+  <!-- BOTTOM BAR -->
+  <div class="reader-bottombar">
+    <button class="reader-btn" id="btnPrev">&#8592; Anterior</button>
+    <span class="reader-counter" id="pageCounter">— / —</span>
+    <button class="reader-btn" id="btnNext">Siguiente &#8594;</button>
+  </div>
+
+  <!-- THUMBNAIL STRIP -->
+  <div class="reader-thumbs" id="thumbStrip"></div>
+
+  <script src="js/reader.js"></script>
+</body>
+</html>

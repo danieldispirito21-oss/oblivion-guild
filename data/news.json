@@ -1,0 +1,44 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "chapter": "Capítulo I",
+      "title": "Reyes de Grinwell",
+      "date": "2024",
+      "category": "guild",
+      "desc": "Oblivion conquistó Stonegard Castle. Éramos pocos. Fuimos reyes. Throne and Liberty quedó marcado con nuestro nombre.",
+      "img": "manga/cap01/01.png",
+      "featured": true
+    },
+    {
+      "id": 2,
+      "chapter": "Capítulo II",
+      "title": "El Manga — Capítulo 1 Publicado",
+      "date": "Junio 2026",
+      "category": "manga",
+      "desc": "La historia de Oblivion llega en formato manga. 31 páginas que narran el inicio — desde el Vacío hasta la taberna donde todo comenzó.",
+      "img": "manga/cap01/04.png",
+      "featured": false
+    },
+    {
+      "id": 3,
+      "chapter": "Prólogo",
+      "title": "Throne and Liberty — Legado",
+      "date": "2025",
+      "category": "guild",
+      "desc": "Cerramos un capítulo. Lo que construimos en Solisium no desaparece — queda grabado en la historia de la guild.",
+      "img": "manga/cap01/20.png",
+      "featured": false
+    },
+    {
+      "id": 4,
+      "chapter": "Capítulo III",
+      "title": "El Próximo Mundo — AION 2",
+      "date": "Próximamente",
+      "category": "juego",
+      "desc": "NCSoft prepara el sucesor de un clásico. Oblivion estará ahí cuando abran las puertas.",
+      "img": null,
+      "featured": false
+    }
+  ]
+}

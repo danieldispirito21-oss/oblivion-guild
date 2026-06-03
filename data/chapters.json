@@ -1,0 +1,16 @@
+{
+  "title": "Oblivion — La Historia de una Guild",
+  "chapters": [
+    {
+      "id": 1,
+      "number": 1,
+      "title": "La Corona de los Nueve",
+      "subtitle": "Prólogos — El Mundo que Luchaba",
+      "pages": 31,
+      "folder": "cap01",
+      "cover": "manga/cap01/01.png",
+      "date": "2026-06-03",
+      "description": "Antes de la primera guerra, antes del primer trono, no existía nada. Solo el Vacío. Y de aquel vacío nació Asterion — la Corona de los Nueve Mundos."
+    }
+  ]
+}

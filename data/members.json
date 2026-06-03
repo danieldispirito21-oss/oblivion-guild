@@ -1,0 +1,86 @@
+{
+  "members": [
+    {
+      "nickname": "Corvo",
+      "role": "Guild Master",
+      "specialty": "DPS / Control",
+      "weapons": "Dagger · Wand & Tome",
+      "bio": "Fundador de Oblivion. Estratega nato. El que decidía cuándo atacar, cuándo esperar y cuándo apostar todo.",
+      "quote": "No pedimos obediencia. Pedimos creer.",
+      "image": "assets/characters/Corvo.png",
+      "badge": "master",
+      "status": "veteran"
+    },
+    {
+      "nickname": "Hazel",
+      "role": "Officer",
+      "specialty": "Support / Healer",
+      "weapons": "Wand & Tome · Staff",
+      "bio": "La razón por la que Oblivion sobrevivió asedios que habrían destruido a cualquier otro guild.",
+      "quote": "La línea no cae mientras yo esté de pie.",
+      "image": "assets/characters/Hazel.png",
+      "badge": "officer",
+      "status": "veteran"
+    },
+    {
+      "nickname": "Kael",
+      "role": "Member",
+      "specialty": "DPS / Ranged",
+      "weapons": "Longbow · Crossbow",
+      "bio": "Silenciosa y letal. Su posicionamiento en siege era imposible de predecir.",
+      "quote": "El que no te ve venir, ya perdió.",
+      "image": "assets/characters/Kael.png",
+      "badge": "member",
+      "status": "veteran"
+    },
+    {
+      "nickname": "Liam",
+      "role": "Member",
+      "specialty": "Frontline / DPS",
+      "weapons": "Sword & Shield · Greatsword",
+      "bio": "De los primeros en entrar y de los últimos en retirarse. Saurodoma fue suya.",
+      "quote": "La lealtad no se promete, se demuestra.",
+      "image": "assets/characters/Liam.png",
+      "badge": "member",
+      "status": "veteran"
+    },
+    {
+      "nickname": "Bastion",
+      "role": "Member",
+      "specialty": "Tank / Protector",
+      "weapons": "Sword & Shield · Wand",
+      "bio": "El escudo más grande del guild. Cuando Alex sostenía una puerta, nadie la cruzaba.",
+      "quote": "Nadie pasa.",
+      "image": "assets/characters/Alex.png",
+      "badge": "member",
+      "status": "veteran"
+    },
+    {
+      "nickname": "Ozzler",
+      "role": "Member",
+      "specialty": "DPS / Disruptor",
+      "weapons": "Greatsword · Dagger",
+      "bio": "El que siempre encontraba el ángulo inesperado. Imposible de ignorar en batalla.",
+      "quote": "Hazlos mirar a otro lado.",
+      "image": "assets/characters/ozzler.png",
+      "badge": "member",
+      "status": "veteran"
+    },
+    {
+      "nickname": "Scions",
+      "role": "Member",
+      "specialty": "DPS / Dark Blade",
+      "weapons": "Greatsword · Dagger",
+      "bio": "Armadura negra. Espada roja. No necesita decir mucho — en batalla, su presencia habla sola.",
+      "quote": "El caos tiene su propio orden.",
+      "image": "assets/characters/Scions.png",
+      "badge": "member",
+      "status": "active"
+    },
+    { "pending": true },
+    { "pending": true },
+    { "pending": true },
+    { "pending": true },
+    { "pending": true }
+  ]
+}

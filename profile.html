@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil — Oblivion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="profile-page" style="background:var(--bg,#010107);">
+
+  <!-- NAV (mismo que el sitio principal) -->
+  <nav id="navbar" style="position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;gap:2rem;padding:0 2.5rem;height:66px;background:rgba(6,6,15,0.95);border-bottom:1px solid rgba(201,168,76,0.1);">
+    <div class="nav-logo" style="display:flex;align-items:center;gap:0.65rem;margin-right:auto;">
+      <img src="assets/Logo.png?v=3" style="width:44px;height:44px;object-fit:contain;">
+      <a href="index.html" style="font-family:'Cinzel',serif;font-size:1.2rem;font-weight:900;color:#C9A84C;text-decoration:none;letter-spacing:0.2em;">OBLIVION</a>
+    </div>
+    <div id="navAuthArea"></div>
+    <button onclick="Auth.logout()" style="font-family:'Cinzel',serif;font-size:0.7rem;color:#666680;background:none;border:none;cursor:pointer;letter-spacing:0.1em;">Salir</button>
+  </nav>
+
+  <!-- Cargando -->
+  <div id="loadingState" style="display:flex;align-items:center;justify-content:center;min-height:100vh;color:#666680;font-style:italic;">
+    Cargando...
+  </div>
+
+  <!-- Perfil principal -->
+  <div id="profileContent" style="display:none;">
+
+    <!-- HERO DEL PERFIL -->
+    <div class="profile-hero">
+      <div class="profile-hero-inner">
+        <!-- Avatar -->
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar" id="profileAvatarBox">
+            <div class="profile-avatar-placeholder">👤</div>
+          </div>
+          <div class="profile-badge-icon badge-member" id="profileBadgeIcon">M</div>
+        </div>
+
+        <!-- Info -->
+        <div class="profile-info">
+          <div class="profile-nickname" id="profileNickname">—</div>
+          <div class="profile-role-line" id="profileRoleLine">—</div>
+          <div class="profile-specialty" id="profileSpecialty"></div>
+          <div class="profile-weapons" id="profileWeapons"></div>
+          <div class="profile-stats" style="margin-top:1.2rem;">
+            <div class="profile-stat">
+              <div class="profile-stat-num" id="statCoins">0</div>
+              <div class="profile-stat-label">GuildCoins ⚜</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-num" id="statAchievements">0</div>
+              <div class="profile-stat-label">Logros</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-num" id="statEvents">0</div>
+              <div class="profile-stat-label">Eventos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MENSAJE PENDIENTE (si no aprobado) -->
+    <div id="pendingNotice" style="display:none;max-width:1100px;margin:2rem auto;padding:0 2rem;">
+      <div class="pending-notice">
+        <div class="pending-notice-icon">⏳</div>
+        <h3>Cuenta pendiente de aprobación</h3>
+        <p>Un officer de Oblivion revisará tu solicitud pronto. Una vez aprobado tendrás acceso a todas las funciones de miembro.</p>
+      </div>
+    </div>
+
+    <!-- BODY DEL PERFIL (solo para miembros aprobados) -->
+    <div class="profile-body" id="memberContent">
+
+      <!-- Editar perfil -->
+      <div class="profile-card">
+        <div class="profile-card-title">⚔ Mi Personaje</div>
+        <div class="profile-edit-group">
+          <label>Nickname</label>
+          <input type="text" id="editNick" placeholder="Tu nombre en juego">
+        </div>
+        <div class="profile-edit-group">
+          <label>Especialidad</label>
+          <input type="text" id="editSpecialty" placeholder="DPS / Tank / Support...">
+        </div>
+        <div class="profile-edit-group">
+          <label>Armas</label>
+          <input type="text" id="editWeapons" placeholder="Greatsword · Dagger">
+        </div>
+        <div class="profile-edit-group">
+          <label>Bio</label>
+          <textarea id="editBio" placeholder="Cuéntanos sobre ti..."></textarea>
+        </div>
+        <div class="profile-edit-group">
+          <label>Quote</label>
+          <input type="text" id="editQuote" placeholder="Tu frase...">
+        </div>
+        <div class="profile-edit-group">
+          <label>URL de imagen de personaje</label>
+          <input type="text" id="editImage" placeholder="https://... o assets/characters/nombre.png">
+        </div>
+        <button class="btn-save" onclick="saveProfile()">Guardar cambios</button>
+        <div class="auth-msg" id="saveMsg" style="margin-top:0.8rem;"></div>
+      </div>
+
+      <!-- Logros -->
+      <div class="profile-card">
+        <div class="profile-card-title">🏆 Logros</div>
+        <div class="achievements-grid" id="achievementsGrid">
+          <p style="color:var(--gray);font-style:italic;font-size:0.83rem;">Sin logros aún. ¡Participa en eventos para ganar tu primero!</p>
+        </div>
+      </div>
+
+      <!-- Próximos eventos -->
+      <div class="profile-card">
+        <div class="profile-card-title">📅 Próximas Misiones</div>
+        <div id="eventsList">
+          <p style="color:var(--gray);font-style:italic;font-size:0.83rem;">No hay eventos programados.</p>
+        </div>
+      </div>
+
+      <!-- Coins history -->
+      <div class="profile-card">
+        <div class="profile-card-title">⚜ GuildCoins — Historial</div>
+        <div id="coinsList">
+          <p style="color:var(--gray);font-style:italic;font-size:0.83rem;">Sin transacciones aún.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script src="js/supabase-client.js"></script>
+<script>
+// Definición de logros disponibles
+const ACHIEVEMENTS_DEF = [
+  { key:'founder',             icon:'🌟', name:'Fundador',              desc:'Miembro desde el inicio' },
+  { key:'stonegard_conqueror', icon:'🏰', name:'Conquistador Stonegard', desc:'Participó en la toma de Stonegard' },
+  { key:'veteran',             icon:'⚔️', name:'Veterano',               desc:'Más de 3 meses en la guild' },
+  { key:'event_5',             icon:'📅', name:'Comprometido',           desc:'Asistió a 5 eventos' },
+  { key:'event_20',            icon:'🔥', name:'Guerrero de Guild',      desc:'Asistió a 20 eventos' },
+  { key:'manga_reader',        icon:'📖', name:'Cronista',               desc:'Leyó el manga de Oblivion' },
+];
+
+const ROLE_LABELS = { admin:'Guild Master', officer:'Officer', member:'Member', pending:'Pendiente' };
+const BADGE_LABELS = { master:'⚜', officer:'◆', member:'·', pending:'?' };
+
+async function loadProfile() {
+  await Auth.init(async (session, profile) => {
+    document.getElementById('loadingState').style.display = 'none';
+    if (!session) { window.location.href = 'login.html'; return; }
+
+    document.getElementById('profileContent').style.display = 'block';
+    updateNavAuth(session, profile);
+
+    if (!profile) return;
+
+    // Hero info
+    document.getElementById('profileNickname').textContent = profile.nickname || 'Sin nickname';
+    document.getElementById('profileRoleLine').textContent = (ROLE_LABELS[profile.role] || profile.role) + (profile.specialty ? ' · ' + profile.specialty : '');
+    document.getElementById('profileSpecialty').textContent = '';
+    document.getElementById('profileWeapons').innerHTML = profile.weapons ? `<span>Armas:</span> ${profile.weapons}` : '';
+    document.getElementById('statCoins').textContent = profile.guild_coins || 0;
+
+    // Badge icon
+    const badgeEl = document.getElementById('profileBadgeIcon');
+    badgeEl.className = `profile-badge-icon badge-${profile.badge || 'member'}`;
+    badgeEl.textContent = BADGE_LABELS[profile.badge] || '·';
+
+    // Avatar
+    if (profile.image_url) {
+      document.getElementById('profileAvatarBox').innerHTML = `<img src="${profile.image_url}" alt="${profile.nickname}" onerror="this.parentElement.innerHTML='<div class=profile-avatar-placeholder>👤</div>'">`;
+    }
+
+    // Edit form pre-fill
+    document.getElementById('editNick').value      = profile.nickname    || '';
+    document.getElementById('editSpecialty').value = profile.specialty   || '';
+    document.getElementById('editWeapons').value   = profile.weapons     || '';
+    document.getElementById('editBio').value       = profile.bio         || '';
+    document.getElementById('editQuote').value     = profile.quote       || '';
+    document.getElementById('editImage').value     = profile.image_url   || '';
+
+    // Pending vs approved
+    const approved = ['member','officer','admin'].includes(profile.role);
+    document.getElementById('pendingNotice').style.display  = approved ? 'none' : 'block';
+    document.getElementById('memberContent').style.display  = approved ? 'grid' : 'none';
+
+    if (approved) {
+      loadAchievements(session.user.id);
+      loadEvents(session.user.id);
+      loadCoins(session.user.id);
+    }
+  });
+}
+
+function updateNavAuth(session, profile) {
+  const el = document.getElementById('navAuthArea');
+  if (!el || !profile) return;
+  el.innerHTML = `<span style="font-size:0.78rem;color:#C9A84C;font-family:'Cinzel',serif;">${profile.nickname || 'Miembro'}</span>`;
+}
+
+async function loadAchievements(userId) {
+  const { data } = await sb.from('achievements').select('achievement').eq('user_id', userId);
+  const earned = new Set((data||[]).map(a=>a.achievement));
+  document.getElementById('statAchievements').textContent = earned.size;
+
+  const grid = document.getElementById('achievementsGrid');
+  grid.innerHTML = ACHIEVEMENTS_DEF.map(a => `
+    <div class="achievement-badge ${earned.has(a.key)?'':'locked'}" title="${a.desc}">
+      <span class="achievement-icon">${a.icon}</span>
+      <span class="achievement-name">${a.name}</span>
+    </div>`).join('');
+}
+
+async function loadEvents(userId) {
+  const { data: events } = await sb.from('events').select('*').gte('event_date', new Date().toISOString()).order('event_date').limit(5);
+  const { data: rsvps  } = await sb.from('event_rsvps').select('event_id,status').eq('user_id', userId);
+  const rsvpMap = Object.fromEntries((rsvps||[]).map(r=>[r.event_id, r.status]));
+
+  document.getElementById('statEvents').textContent = (rsvps||[]).filter(r=>r.status==='attending').length;
+
+  const el = document.getElementById('eventsList');
+  if (!events || !events.length) {
+    el.innerHTML = '<p style="color:var(--gray);font-style:italic;font-size:0.83rem;">No hay eventos próximos.</p>';
+    return;
+  }
+
+  el.innerHTML = events.map(ev => {
+    const d = new Date(ev.event_date);
+    const dateStr = d.toLocaleDateString('es-ES', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+    const myRsvp = rsvpMap[ev.id];
+    const attending = myRsvp === 'attending';
+    return `
+    <div class="event-item">
+      <div class="event-dot ${ev.event_type}"></div>
+      <div class="event-info">
+        <div class="event-title-s">${ev.title}</div>
+        <div class="event-date-s">${dateStr}</div>
+      </div>
+      <button class="event-rsvp-btn ${attending?'rsvp-done':'rsvp-yes'}"
+              onclick="toggleRsvp(${ev.id}, this, ${attending})">
+        ${attending ? '✓ Confirmado' : '+ Asistir'}
+      </button>
+    </div>`;
+  }).join('');
+}
+
+async function toggleRsvp(eventId, btn, isAttending) {
+  if (!Auth.session) return;
+  if (isAttending) {
+    await sb.from('event_rsvps').delete().eq('event_id', eventId).eq('user_id', Auth.session.user.id);
+    btn.className = 'event-rsvp-btn rsvp-yes'; btn.textContent = '+ Asistir';
+    btn.onclick = () => toggleRsvp(eventId, btn, false);
+  } else {
+    await sb.from('event_rsvps').upsert({ event_id: eventId, user_id: Auth.session.user.id, status: 'attending' });
+    btn.className = 'event-rsvp-btn rsvp-done'; btn.textContent = '✓ Confirmado';
+    btn.onclick = () => toggleRsvp(eventId, btn, true);
+  }
+}
+
+async function loadCoins(userId) {
+  const { data } = await sb.from('coin_transactions').select('*').eq('user_id', userId).order('created_at', {ascending:false}).limit(10);
+  const el = document.getElementById('coinsList');
+  if (!data || !data.length) {
+    el.innerHTML = '<p style="color:var(--gray);font-style:italic;font-size:0.83rem;">Sin transacciones.</p>';
+    return;
+  }
+  el.innerHTML = data.map(t => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+      <div>
+        <div style="font-size:0.83rem;color:var(--white);">${t.reason || 'GuildCoins'}</div>
+        <div style="font-size:0.68rem;color:var(--gray);">${new Date(t.created_at).toLocaleDateString('es-ES')}</div>
+      </div>
+      <div style="font-family:'Cinzel',serif;color:${t.amount>0?'#C9A84C':'#ff8888'};">
+        ${t.amount>0?'+':''}${t.amount} ⚜
+      </div>
+    </div>`).join('');
+}
+
+async function saveProfile() {
+  const updates = {
+    nickname:  document.getElementById('editNick').value.trim(),
+    specialty: document.getElementById('editSpecialty').value.trim(),
+    weapons:   document.getElementById('editWeapons').value.trim(),
+    bio:       document.getElementById('editBio').value.trim(),
+    quote:     document.getElementById('editQuote').value.trim(),
+    image_url: document.getElementById('editImage').value.trim(),
+  };
+  const { error } = await Auth.updateProfile(updates);
+  const msgEl = document.getElementById('saveMsg');
+  if (error) {
+    msgEl.textContent = 'Error al guardar: ' + error.message;
+    msgEl.className = 'auth-msg show error';
+  } else {
+    msgEl.textContent = '✓ Perfil actualizado';
+    msgEl.className = 'auth-msg show success';
+    document.getElementById('profileNickname').textContent = updates.nickname;
+    if (updates.image_url) document.getElementById('profileAvatarBox').innerHTML = `<img src="${updates.image_url}" alt="${updates.nickname}">`;
+    setTimeout(() => msgEl.className = 'auth-msg', 3000);
+  }
+}
+
+loadProfile();
+</script>
+</body>
+</html>

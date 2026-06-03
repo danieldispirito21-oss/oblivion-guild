@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBLIVION — La Guild</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Lato:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- STARFIELD fijo detrás de todo -->
+  <canvas id="particles"></canvas>
+
+  <!-- ══ NAV ══ -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <img src="assets/Logo.png?v=3" alt="" class="nav-logo-icon">
+      OBLIVION
+    </div>
+    <ul class="nav-links">
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#noticias">Noticias</a></li>
+      <li><a href="#juegos">Juegos</a></li>
+      <li><a href="#miembros">Miembros</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#guias">Guías</a></li>
+      <li><a href="#historias">Historias</a></li>
+      <li><a href="#reclutamiento">Únete</a></li>
+    </ul>
+    <div id="navAuthArea"></div>
+    <a href="#discord" class="nav-discord">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+      Discord
+    </a>
+    <button class="nav-cta" onclick="location.href='#reclutamiento'">Únete a Oblivion</button>
+    <button class="nav-hamburger" id="hamburger">&#9776;</button>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <section id="hero">
+    <!-- Atmósfera mística -->
+    <div class="hero-nebula"></div>
+    <div class="hero-eyes">
+      <div class="hero-eye"></div>
+      <div class="hero-eye"></div>
+    </div>
+    <div class="hero-mist"></div>
+
+    <div class="hero-content">
+      <div class="hero-logo">
+        <img src="assets/Logo.png?v=3" alt="Oblivion Logo" class="hero-logo-img">
+      </div>
+      <div class="hero-eyebrow">· Bienvenido a la Guild ·</div>
+
+      <h1 class="hero-title" id="heroTitle">
+        <span class="hero-letter" style="--i:0">O</span><span class="hero-letter" style="--i:1">B</span><span class="hero-letter" style="--i:2">L</span><span class="hero-letter" style="--i:3">I</span><span class="hero-letter" style="--i:4">V</span><span class="hero-letter" style="--i:5">I</span><span class="hero-letter" style="--i:6">O</span><span class="hero-letter" style="--i:7">N</span>
+      </h1>
+
+      <div class="hero-tagline">Est. Whisperion &nbsp;·&nbsp; Grinwell &nbsp;·&nbsp; Más allá</div>
+      <div class="hero-divider"></div>
+      <p class="hero-subtitle">
+        Una guild forjada en batallas, traiciones y victorias épicas.<br>
+        No pedimos obediencia. Pedimos creer en algo.
+      </p>
+      <div class="hero-buttons">
+        <a href="#nosotros" class="btn btn-primary">Conocer la Guild</a>
+        <a href="reader.html" class="btn btn-secondary">Leer el Manga</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-bar"></div>
+    </div>
+  </section>
+
+  <!-- ══ NOSOTROS ══ -->
+  <section id="nosotros">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Quiénes somos</div>
+      <h2>La Guild Oblivion</h2>
+      <p>Más que un grupo de jugadores. Una comunidad que crea, compite y deja huella en cada mundo que pisa.</p>
+    </div>
+
+    <div class="nosotros-grid">
+      <div class="nosotros-text reveal">
+        <h3>Forjados en Throne and Liberty</h3>
+        <p>Empezamos siendo pocos. En un juego donde los guilds grandes dominaban por números, nosotros dominamos por otra cosa. Un grupo pequeño, unido, que pensaba antes de actuar y ejecutaba cuando los demás dudaban.</p>
+        <p>Conquistamos Grinwell. Nos sentamos en el trono de Stonegard. Fuimos reyes — y ese legado nadie nos lo quita.</p>
+        <p>Throne and Liberty quedó atrás, pero Oblivion no desaparece con un juego. La guild sigue. El próximo mundo nos espera.</p>
+
+        <div class="nosotros-values">
+          <div class="value-card reveal reveal-delay-1">
+            <div class="value-icon">⚔️</div>
+            <div class="value-name">Lealtad</div>
+            <div class="value-desc">Los que entran por la puerta no salen por la espalda.</div>
+          </div>
+          <div class="value-card reveal reveal-delay-2">
+            <div class="value-icon">🧠</div>
+            <div class="value-name">Estrategia</div>
+            <div class="value-desc">Ganamos con cabeza, no solo con fuerza.</div>
+          </div>
+          <div class="value-card reveal reveal-delay-1">
+            <div class="value-icon">🌌</div>
+            <div class="value-name">Épica</div>
+            <div class="value-desc">Cada historia que vivimos merece ser contada.</div>
+          </div>
+          <div class="value-card reveal reveal-delay-2">
+            <div class="value-icon">🔥</div>
+            <div class="value-name">Ambición</div>
+            <div class="value-desc">No competimos para participar. Competimos para dominar.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nosotros-stats reveal">
+        <div class="stat-box reveal-delay-1">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Mundos conquistados</div>
+        </div>
+        <div class="stat-box reveal-delay-2">
+          <div class="stat-num">1</div>
+          <div class="stat-label">Guild. Sin compromisos.</div>
+        </div>
+        <div class="stat-box reveal-delay-1">
+          <div class="stat-num">88+</div>
+          <div class="stat-label">Capítulos de historia</div>
+        </div>
+        <div class="stat-box reveal-delay-2">
+          <div class="stat-num">0</div>
+          <div class="stat-label">Traiciones toleradas</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ JUEGOS ══ -->
+  <section id="juegos">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Actividad</div>
+      <h2>Nuestros Mundos</h2>
+      <p>Cada juego es un nuevo mundo. Oblivion llega, aprende y domina.</p>
+    </div>
+
+    <div class="games-grid">
+      <!-- Throne and Liberty - Pasado -->
+      <div class="game-card reveal" style="--c1:#12082a;--c2:#06040f;">
+        <div class="game-bg" style="background:linear-gradient(135deg,#1a0a35,#0a051a);"></div>
+        <div class="game-status status-past">Legado</div>
+        <div class="game-overlay">
+          <div class="game-tag">MMORPG · NCSoft · Amazon Games</div>
+          <div class="game-name">Throne and Liberty</div>
+          <div class="game-desc">Conquistamos Grinwell. Fuimos reyes de Stonegard. Ese capítulo cerró — el legado quedó.</div>
+        </div>
+      </div>
+
+      <!-- TL features -->
+      <div class="game-card reveal" style="cursor:default;--c1:#0d1525;--c2:#060c18;">
+        <div class="game-bg" style="background:linear-gradient(135deg,#0d1525,#060c18);"></div>
+        <div class="game-overlay" style="justify-content:center;gap:0.7rem;padding:1.2rem;">
+          <div style="font-size:0.65rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;text-align:center;">Throne and Liberty · Highlights</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;width:100%;">
+            <div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.12);border-radius:6px;padding:0.6rem;text-align:center;">
+              <div style="font-size:1.1rem;">⚔️</div>
+              <div style="font-size:0.68rem;color:var(--gold);font-family:'Cinzel',serif;margin:0.2rem 0;">Siege Wars</div>
+              <div style="font-size:0.65rem;color:var(--gray);">45-60 min castle battles</div>
+            </div>
+            <div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.12);border-radius:6px;padding:0.6rem;text-align:center;">
+              <div style="font-size:1.1rem;">🏰</div>
+              <div style="font-size:0.68rem;color:var(--gold);font-family:'Cinzel',serif;margin:0.2rem 0;">Stonegard Castle</div>
+              <div style="font-size:0.65rem;color:var(--gray);">Control del reino</div>
+            </div>
+            <div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.12);border-radius:6px;padding:0.6rem;text-align:center;">
+              <div style="font-size:1.1rem;">🐺</div>
+              <div style="font-size:0.68rem;color:var(--gold);font-family:'Cinzel',serif;margin:0.2rem 0;">Morphs</div>
+              <div style="font-size:0.65rem;color:var(--gray);">Transformaciones animales</div>
+            </div>
+            <div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.12);border-radius:6px;padding:0.6rem;text-align:center;">
+              <div style="font-size:1.1rem;">🗡️</div>
+              <div style="font-size:0.68rem;color:var(--gold);font-family:'Cinzel',serif;margin:0.2rem 0;">7 Armas</div>
+              <div style="font-size:0.65rem;color:var(--gray);">Sin clases fijas, 21 combos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AION 2 - Próximamente -->
+      <div class="game-card reveal" style="--c1:#0a1a1a;--c2:#050f10;">
+        <div class="game-bg" style="background:linear-gradient(135deg,#0a1e28,#050d12);"></div>
+        <div class="game-status status-soon">¿Próximo?</div>
+        <div class="game-overlay">
+          <div class="game-tag">MMORPG · NCSoft</div>
+          <div class="game-name">AION 2</div>
+          <div class="game-desc">El sucesor de un clásico. Un nuevo mundo en el horizonte. Oblivion estará ahí.</div>
+        </div>
+      </div>
+
+      <div class="game-card-add reveal">
+        <div style="font-size:2rem;opacity:0.3">+</div>
+        <div style="font-size:0.8rem;letter-spacing:0.1em;">Próximo mundo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ NOTICIAS ══ -->
+  <section id="noticias">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Crónicas</div>
+      <h2>Últimas Noticias</h2>
+      <p>Lo que ha pasado, lo que está pasando, lo que viene.</p>
+    </div>
+    <div class="news-grid" id="newsGrid">
+      <!-- populated by JS -->
+    </div>
+  </section>
+
+  <!-- ══ GALERÍA ══ -->
+  <section id="galeria">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Galería</div>
+      <h2>Momentos de Oblivion</h2>
+      <p>Screenshots, arte y momentos que quedaron grabados. Añade tus capturas cuando las tengas.</p>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- populated by JS -->
+    </div>
+    <p style="text-align:center;font-size:0.72rem;color:var(--gray);font-style:italic;">
+      Las imágenes con · Placeholder · serán reemplazadas por screenshots reales del guild.
+    </p>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" id="lbClose">✕</button>
+      <button class="lightbox-nav lightbox-prev" id="lbPrev">‹</button>
+      <button class="lightbox-nav lightbox-next" id="lbNext">›</button>
+      <img class="lightbox-img" id="lbImg" src="" alt="">
+      <div class="lightbox-caption" id="lbCaption"></div>
+      <div class="lightbox-sub" id="lbSub"></div>
+    </div>
+  </div>
+
+  <!-- ══ MIEMBROS ══ -->
+  <section id="miembros">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">La Guild</div>
+      <h2>Los Miembros</h2>
+      <p>Pocos. Unidos. Cada uno con un rol, una historia y un lugar en Oblivion.</p>
+    </div>
+    <div class="members-grid" id="membersGrid">
+      <!-- populated by JS desde data/members.json -->
+    </div>
+    <p style="text-align:center;font-size:0.75rem;color:var(--gray);font-style:italic;">
+      Pasa el cursor sobre cada miembro para ver su perfil completo.
+    </p>
+  </section>
+
+  <!-- ══ HISTORIAS ══ -->
+  <section id="historias">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Crónicas</div>
+      <h2>Nuestras Historias</h2>
+      <p>Cada guild deja rastros. Nosotros dejamos leyendas. Aquí viven todas.</p>
+    </div>
+
+    <div class="stories-grid" id="storiesGrid">
+      <!-- La historia de Oblivion -->
+      <div class="story-card reveal" onclick="location.href='reader.html?ch=1'">
+        <div class="story-cover">
+          <img src="manga/cap01/01.png" alt="La Historia de una Guild">
+          <div class="story-cover-overlay"></div>
+        </div>
+        <div class="story-body">
+          <div class="story-universe">Asterion · Manga</div>
+          <div class="story-title">La Historia de una Guild — Oblivion</div>
+          <div class="story-desc">De una taberna sin nombre en Whisperion al trono de Stonegard. La crónica épica del ascenso de Oblivion contada en manga.</div>
+          <div class="story-meta">
+            <span class="story-chapters">1 cap. publicado · 88+ escritos</span>
+            <a class="story-cta" href="reader.html?ch=1">Leer &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historia próxima -->
+      <div class="story-coming reveal reveal-delay-1">
+        <div style="font-size:2.5rem;opacity:0.25;">📖</div>
+        <div style="font-family:'Cinzel',serif;font-size:0.9rem;color:var(--gold);opacity:0.5;">Historia #2</div>
+        <p>El próximo mundo. La próxima leyenda.</p>
+      </div>
+    </div>
+
+    <!-- CTA manga section -->
+    <div style="text-align:center;margin-top:4rem;" class="reveal">
+      <div class="section-eyebrow">Ya disponible</div>
+      <h3 style="font-family:'Cinzel',serif;font-size:1.6rem;color:var(--white);margin:1rem 0;">Lee el Manga</h3>
+      <p style="color:var(--gray);max-width:500px;margin:0 auto 2rem;font-style:italic;">31 páginas publicadas del Capítulo 1. La historia de cómo Oblivion llegó a ser lo que es.</p>
+      <a href="reader.html" class="btn btn-primary">Leer ahora &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ══ GUÍAS ══ -->
+  <section id="guias">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Conocimiento</div>
+      <h2>Guías de Oblivion</h2>
+      <p>Builds, tácticas de siege y recursos del guild. El conocimiento que nos hizo ganar.</p>
+    </div>
+    <div class="guides-grid" id="guidesGrid">
+      <!-- populated by JS -->
+    </div>
+  </section>
+
+  <!-- ══ RECLUTAMIENTO ══ -->
+  <section id="reclutamiento">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Únete</div>
+      <h2>¿Eres de Oblivion?</h2>
+      <p>No buscamos números. Buscamos personas que encajen.</p>
+    </div>
+
+    <div class="recruit-container">
+      <div class="recruit-info reveal">
+        <h3>Lo que buscamos</h3>
+        <p>Oblivion no recluta a cualquiera. No somos una puerta abierta. Somos una decisión activa de quiénes somos y quiénes queremos ser.</p>
+        <p>Si sientes que encajas, probablemente sí encajes. Si no estás seguro, probablemente no.</p>
+
+        <ul class="recruit-reqs">
+          <li>Activo y comprometido con el grupo</li>
+          <li>Estratégico — piensan antes de actuar</li>
+          <li>Leal — lo que se dice dentro, queda dentro</li>
+          <li>Ambicioso — quieren ganar, no solo participar</li>
+          <li>Parte de algo más grande — no solo su personaje</li>
+        </ul>
+
+        <div class="recruit-discord">
+          <div style="font-size:1.2rem;margin-bottom:0.5rem;">💬</div>
+          ¿Prefieres hablar directo?<br>
+          <a href="#" onclick="return false;">Únete a nuestro Discord</a> y preséntate.
+        </div>
+      </div>
+
+      <div class="recruit-form reveal reveal-delay-1">
+        <h4>Postulación</h4>
+        <div class="form-group">
+          <label>Nombre / Nick</label>
+          <input type="text" placeholder="¿Cómo te llaman?">
+        </div>
+        <div class="form-group">
+          <label>Juego de interés</label>
+          <select>
+            <option value="">Seleccionar...</option>
+            <option>Asterion Online</option>
+            <option>Otro (especificar abajo)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Por qué Oblivion?</label>
+          <textarea placeholder="Convéncenos en pocas palabras..."></textarea>
+        </div>
+        <button class="btn btn-primary" style="width:100%;" onclick="alert('¡Gracias! Nos pondremos en contacto.')">
+          Enviar postulación
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <div class="footer-logo-wrap">
+      <img src="assets/Logo.png?v=3" alt="" class="footer-logo-icon">
+      <div class="footer-logo">OBLIVION</div>
+    </div>
+    <div class="footer-sub">La Guild · Asterion · Est. Whisperion</div>
+    <div class="footer-links">
+      <a href="#nosotros">Nosotros</a>
+      <a href="#juegos">Juegos</a>
+      <a href="#historias">Historias</a>
+      <a href="reader.html">Manga</a>
+      <a href="#reclutamiento">Únete</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 Oblivion Guild. Todos los derechos reservados.</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/main.js"></script>
+  <script>initNavAuth();</script>
+</body>
+</html>
