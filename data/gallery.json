@@ -1,49 +1,19 @@
 {
   "items": [
     {
-      "id": 1,
-      "title": "La Corona de los Nueve",
-      "desc": "El universo que nos vio nacer — Asterion.",
-      "img": "assets/gallery/placeholder-01.jpg",
-      "placeholder": true
+      "id": 7,
+      "placeholder": true,
+      "empty": true
     },
     {
-      "id": 2,
-      "title": "Los Dioses Primeros",
-      "desc": "Aureon, Tharvok, Elyndra, Vael-Kor, Nymara.",
-      "img": "assets/gallery/placeholder-04.jpg",
-      "placeholder": true
+      "id": 8,
+      "placeholder": true,
+      "empty": true
     },
     {
-      "id": 3,
-      "title": "Whisperion — El Caos",
-      "desc": "Donde todo comenzó. La guerra sin fin.",
-      "img": "assets/gallery/placeholder-10.jpg",
-      "placeholder": true
-    },
-    {
-      "id": 4,
-      "title": "Oblivion en Marcha",
-      "desc": "La guild cruzando hacia Grinwell.",
-      "img": "assets/gallery/placeholder-14.jpg",
-      "placeholder": true
-    },
-    {
-      "id": 5,
-      "title": "La Batalla",
-      "desc": "Saurodoma. La noche más larga.",
-      "img": "assets/gallery/placeholder-20.jpg",
-      "placeholder": true
-    },
-    {
-      "id": 6,
-      "title": "Hacia Stonegard",
-      "desc": "El asedio final se acerca.",
-      "img": "assets/gallery/placeholder-25.jpg",
-      "placeholder": true
-    },
-    { "id": 7, "placeholder": true, "empty": true },
-    { "id": 8, "placeholder": true, "empty": true },
-    { "id": 9, "placeholder": true, "empty": true }
+      "id": 9,
+      "placeholder": true,
+      "empty": true
+    }
   ]
 }
