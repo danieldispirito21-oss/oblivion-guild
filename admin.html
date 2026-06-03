@@ -62,6 +62,14 @@
 
   <!-- Main -->
   <main class="admin-main">
+    <!-- Banner: modo online vs local -->
+    <div id="onlineBanner" style="display:none;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:0.9rem 1.2rem;margin-bottom:1.5rem;font-size:0.83rem;color:#C9A84C;display:flex;align-items:center;gap:0.8rem;">
+      <span style="font-size:1.2rem;">⚠️</span>
+      <div>
+        <strong>Modo online</strong> — Los cambios de Miembros, Noticias, Guías y Galería solo se guardan cuando usas el admin en <strong>localhost:3333</strong> con el servidor local corriendo. En Netlify solo funciona la gestión de <strong>Usuarios</strong>.
+        <br><span style="opacity:0.7;font-size:0.75rem;">Para guardar contenido: edita en localhost → git push → Netlify se actualiza automáticamente.</span>
+      </div>
+    </div>
 
     <!-- Dashboard -->
     <div class="admin-section active" id="sec-dashboard">

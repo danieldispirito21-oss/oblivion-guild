@@ -178,8 +178,13 @@ async function confirmGiveAchievement() {
   closeModal('achieveModal');
 }
 
-// Iniciar Supabase admin cuando la página carga
-document.addEventListener('DOMContentLoaded', () => initSupabaseAdmin());
+// Mostrar banner si estamos en Netlify (no en localhost)
+document.addEventListener('DOMContentLoaded', () => {
+  initSupabaseAdmin();
+  const isOnline = !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0');
+  const banner = document.getElementById('onlineBanner');
+  if (isOnline && banner) banner.style.display = 'flex';
+});
 
 // ── STATE ──
 let token = localStorage.getItem('oblivion_admin_token') || null;
