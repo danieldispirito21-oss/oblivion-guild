@@ -158,7 +158,7 @@ const io = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 // ── NEWS (desde Supabase) ──
-_newsPromise.then(({ data }) => {
+sb.from('content_news').select('*').order('sort_order').then(({ data }) => {
     const grid = document.getElementById('newsGrid');
     if (!grid || !data) return;
     const posts = data;
@@ -297,8 +297,8 @@ sb.from('content_members').select('*').order('sort_order').then(({ data }) => {
       <div class="member-card reveal" style="transition-delay:${delay}s">
         <div class="member-stripe stripe-${m.badge}"></div>
         <div class="member-status status-${m.status}" title="${m.status}"></div>
-        <div class="member-badge badge-${m.badge}">${m.role}</div>
-        <img class="member-img" src="${m.image}" alt="${m.nickname}" loading="lazy"
+        <div class="member-badge badge-${m.badge}">${m.role_label || m.role || 'Member'}</div>
+        <img class="member-img" src="${m.image_url || m.image || ''}" alt="${m.nickname}" loading="lazy"
              onerror="this.src='assets/characters/Corvo.png'">
         <div class="member-default">
           <div class="member-nickname">${m.nickname}</div>
@@ -306,7 +306,7 @@ sb.from('content_members').select('*').order('sort_order').then(({ data }) => {
         </div>
         <div class="member-hover">
           <div class="hover-nick">${m.nickname}</div>
-          <div class="hover-role">${m.role} &nbsp;·&nbsp; ${m.specialty}</div>
+          <div class="hover-role">${m.role_label || ''} &nbsp;·&nbsp; ${m.specialty}</div>
           <div class="hover-row">
             <span class="hover-label">Armas</span>
             <span class="hover-val">${m.weapons}</span>
