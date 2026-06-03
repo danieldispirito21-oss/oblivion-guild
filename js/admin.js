@@ -19,6 +19,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('adminLayout').style.display = 'flex';
     document.getElementById('adminUserLabel').textContent = profile.nickname + ' · ' + profile.role;
     loadAll();
+    initDropzones();
   });
 });
 
@@ -42,6 +43,143 @@ function showSection(name, el) {
   document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
   document.getElementById('sec-' + name).classList.add('active');
   if (el) el.classList.add('active');
+}
+
+// ════════════════════════════════════════════
+// SUPABASE STORAGE — Upload de imágenes
+// ════════════════════════════════════════════
+
+const BUCKET = 'guild-images';
+
+async function uploadToStorage(file, folder = 'general') {
+  const ext  = file.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g,'') || 'jpg';
+  const name = `${folder}/${Date.now()}-${Math.random().toString(36).substr(2,5)}.${ext}`;
+  const { error } = await sb.storage.from(BUCKET).upload(name, file, {
+    cacheControl: '31536000', upsert: false, contentType: file.type
+  });
+  if (error) throw new Error(error.message);
+  const { data: { publicUrl } } = sb.storage.from(BUCKET).getPublicUrl(name);
+  return publicUrl;
+}
+
+// ── Inicializar todos los dropzones ──
+function initDropzones() {
+  document.querySelectorAll('.dropzone').forEach(zone => {
+    const fileInput  = zone.querySelector('input[type=file]');
+    const folder     = zone.dataset.folder || 'general';
+    const targetId   = zone.dataset.target;
+    const thumbClass = zone.dataset.thumb || 'drop-thumb';
+
+    // Click en la zona (no en el botón remove)
+    zone.addEventListener('click', e => {
+      if (e.target.closest('.drop-remove') || e.target.closest('input[type=file]') || e.target.closest('label')) return;
+      if (zone.querySelector('.drop-preview-wrap')?.style.display !== 'none') return;
+      fileInput?.click();
+    });
+
+    // Drag & drop
+    zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', e => { if (!zone.contains(e.relatedTarget)) zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file?.type.startsWith('image/')) handleUpload(zone, file, folder, targetId, thumbClass);
+    });
+
+    // Selección de archivo
+    if (fileInput) fileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) handleUpload(zone, file, folder, targetId, thumbClass);
+    });
+
+    // Botón remove
+    zone.querySelector('.drop-remove')?.addEventListener('click', e => {
+      e.stopPropagation();
+      resetDropzone(zone, targetId);
+    });
+
+    // Sync URL manual → preview thumbnail
+    const urlInput = targetId ? document.getElementById(targetId) : null;
+    if (urlInput) urlInput.addEventListener('input', () => {
+      const url = urlInput.value.trim();
+      if (url) {
+        const thumb = zone.querySelector('.' + thumbClass);
+        if (thumb) { thumb.src = url; }
+        showDropPreview(zone, url, 'URL manual', url, thumbClass);
+      }
+    });
+  });
+}
+
+async function handleUpload(zone, file, folder, targetId, thumbClass) {
+  const inner   = zone.querySelector('.dropzone-inner');
+  const progress = zone.querySelector('.drop-progress');
+  const preview  = zone.querySelector('.drop-preview-wrap');
+
+  // Mostrar preview local instantáneo
+  const reader = new FileReader();
+  reader.onload = e => {
+    const thumb = zone.querySelector('.' + thumbClass);
+    if (thumb) thumb.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+
+  // Mostrar barra de progreso
+  if (inner)    inner.style.display    = 'none';
+  if (progress) progress.style.display = 'flex';
+  if (preview)  preview.style.display  = 'none';
+
+  try {
+    const url = await uploadToStorage(file, folder);
+
+    // Rellenar input target
+    const urlInput = targetId ? document.getElementById(targetId) : null;
+    if (urlInput) urlInput.value = url;
+
+    // Mostrar preview final
+    showDropPreview(zone, url, file.name, url, thumbClass);
+    toast('✓ Imagen subida');
+  } catch (err) {
+    if (inner)    inner.style.display    = 'flex';
+    if (progress) progress.style.display = 'none';
+    toast('Error al subir: ' + err.message, 'error');
+  }
+}
+
+function showDropPreview(zone, imgSrc, fname, urlText, thumbClass) {
+  const inner   = zone.querySelector('.dropzone-inner');
+  const progress = zone.querySelector('.drop-progress');
+  const preview  = zone.querySelector('.drop-preview-wrap');
+  const thumb    = zone.querySelector('.' + thumbClass);
+  const fnameEl  = zone.querySelector('.drop-fname');
+  const urlEl    = zone.querySelector('.drop-url');
+
+  if (inner)    inner.style.display    = 'none';
+  if (progress) progress.style.display = 'none';
+  if (preview)  preview.style.display  = 'flex';
+  if (thumb)    thumb.src  = imgSrc;
+  if (fnameEl)  fnameEl.textContent = fname;
+  if (urlEl)    urlEl.textContent   = urlText.length > 60 ? '...' + urlText.slice(-45) : urlText;
+}
+
+function resetDropzone(zone, targetId) {
+  const inner   = zone.querySelector('.dropzone-inner');
+  const progress = zone.querySelector('.drop-progress');
+  const preview  = zone.querySelector('.drop-preview-wrap');
+  const fileInput = zone.querySelector('input[type=file]');
+
+  if (inner)    inner.style.display    = 'flex';
+  if (progress) progress.style.display = 'none';
+  if (preview)  preview.style.display  = 'none';
+  if (fileInput) fileInput.value = '';
+  if (targetId) { const el = document.getElementById(targetId); if (el) el.value = ''; }
+}
+
+// Inicializar dropzones cuando abre un modal
+function resetAndInitDropzone(zoneId, targetId) {
+  const zone = document.getElementById(zoneId);
+  if (!zone) return;
+  resetDropzone(zone, targetId);
 }
 
 // ── LOAD ALL ──
@@ -101,6 +239,7 @@ function renderMembers() {
 }
 
 function openMemberModal(id = null) {
+  resetAndInitDropzone('dz-member', 'mImage');
   const m = id ? membersData.find(x => x.id === id) : {};
   document.getElementById('mDbId').value       = m?.id || '';
   document.getElementById('mNick').value       = m?.nickname    || '';
@@ -179,6 +318,7 @@ function renderNews() {
 }
 
 function openNewsModal(id = null) {
+  resetAndInitDropzone('dz-news', 'nImg');
   const p = id ? newsData.find(x => x.id === id) : {};
   document.getElementById('nDbId').value     = p?.id || '';
   document.getElementById('nChapter').value  = p?.chapter     || '';
@@ -317,34 +457,51 @@ function renderGallery() {
         <div style="font-size:0.72rem;color:var(--gray);">${item.description || ''}</div>
       </div>
       <div style="display:flex;gap:0.4rem;">
-        <button class="btn btn-secondary btn-sm" onclick="editGallery(${item.id})" style="flex:1;">✏️ Editar</button>
+        <button class="btn btn-secondary btn-sm" onclick="editGallery(${item.id})" style="flex:1;">✏️ Editar imagen</button>
         <button class="btn btn-danger btn-sm" onclick="deleteGallery(${item.id})">🗑️</button>
       </div>
     </div>`).join('');
 }
 
 function openGalleryAdd() {
-  const url   = prompt('URL o ruta de la imagen (ej: assets/gallery/foto.jpg):');
-  if (!url) return;
-  const title = prompt('Título:') || '';
-  const desc  = prompt('Descripción:') || '';
-  sb.from('content_gallery').insert({ image_url: url, title, description: desc, sort_order: galleryData.length + 1 })
-    .then(({ error }) => {
-      if (error) return toast('Error: ' + error.message, 'error');
-      toast('Imagen agregada ✓');
-      loadGallery();
-    });
+  document.getElementById('gDbId').value    = '';
+  document.getElementById('gImgUrl').value  = '';
+  document.getElementById('gTitle2').value  = '';
+  document.getElementById('gDesc2').value   = '';
+  document.getElementById('galleryModalTitle').textContent = 'Agregar Imagen';
+  resetAndInitDropzone('dz-gallery', 'gImgUrl');
+  openModal('galleryModal');
 }
 
 async function editGallery(id) {
   const item = galleryData.find(i => i.id === id);
-  const url   = prompt('URL de imagen:', item?.image_url || '');
-  if (url === null) return;
-  const title = prompt('Título:', item?.title || '') || '';
-  const desc  = prompt('Descripción:', item?.description || '') || '';
-  const { error } = await sb.from('content_gallery').update({ image_url: url, title, description: desc }).eq('id', id);
+  document.getElementById('gDbId').value    = id;
+  document.getElementById('gImgUrl').value  = item?.image_url   || '';
+  document.getElementById('gTitle2').value  = item?.title       || '';
+  document.getElementById('gDesc2').value   = item?.description || '';
+  document.getElementById('galleryModalTitle').textContent = 'Editar Imagen';
+  resetAndInitDropzone('dz-gallery', 'gImgUrl');
+  // Mostrar preview si hay imagen
+  if (item?.image_url) {
+    const zone = document.getElementById('dz-gallery');
+    if (zone) showDropPreview(zone, item.image_url, item.title || 'imagen', item.image_url, 'drop-thumb-square');
+  }
+  openModal('galleryModal');
+}
+
+async function saveGalleryItem() {
+  const dbId    = document.getElementById('gDbId').value;
+  const imgUrl  = document.getElementById('gImgUrl').value.trim();
+  const title   = document.getElementById('gTitle2').value.trim();
+  const desc    = document.getElementById('gDesc2').value.trim();
+  if (!imgUrl) return toast('Sube o pega una imagen primero', 'error');
+  const payload = { image_url: imgUrl, title, description: desc };
+  const { error } = dbId
+    ? await sb.from('content_gallery').update(payload).eq('id', parseInt(dbId))
+    : await sb.from('content_gallery').insert({ ...payload, sort_order: galleryData.length + 1 });
   if (error) return toast('Error: ' + error.message, 'error');
-  toast('Imagen actualizada ✓');
+  toast(dbId ? 'Imagen actualizada ✓' : 'Imagen agregada ✓');
+  closeModal('galleryModal');
   await loadGallery();
 }
 
