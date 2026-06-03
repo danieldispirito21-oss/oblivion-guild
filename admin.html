@@ -10,22 +10,23 @@
 </head>
 <body>
 
-<!-- ══ LOGIN ══ -->
-<div class="login-page" id="loginPage">
+<!-- ══ NO AUTH ══ -->
+<div class="login-page" id="noAuthPage" style="display:none;">
   <div class="login-box">
     <img class="login-logo" src="assets/Logo.png?v=3" alt="Oblivion">
-    <div class="login-title">OBLIVION</div>
-    <div class="login-sub">Panel de Administración</div>
-    <input type="password" id="loginPass" placeholder="Contraseña" autocomplete="current-password">
-    <button class="login-btn" onclick="doLogin()">Entrar</button>
-    <div class="login-err" id="loginErr">Contraseña incorrecta</div>
+    <div class="login-title">OBLIVION ADMIN</div>
+    <div class="login-sub" style="margin-bottom:1.5rem;">Debes iniciar sesión como Officer o Guild Master</div>
+    <a href="login.html" style="display:block;text-align:center;padding:0.75rem;background:var(--gold);color:#000;border-radius:8px;font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-decoration:none;">
+      Ir al login
+    </a>
+    <div id="authRoleError" style="display:none;margin-top:1rem;font-size:0.78rem;color:#ff8888;text-align:center;">
+      Tu cuenta no tiene permisos de Officer o Admin.
+    </div>
   </div>
 </div>
 
 <!-- ══ ADMIN ══ -->
 <div class="admin-layout" id="adminLayout" style="display:none;">
-
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="assets/Logo.png?v=3" alt="">
@@ -33,60 +34,33 @@
       <span class="sidebar-badge">Admin</span>
     </div>
     <nav class="sidebar-nav">
-      <a href="#" class="active" onclick="showSection('dashboard',this)">
-        <span class="nav-icon">🏠</span> Dashboard
-      </a>
-      <a href="#" onclick="showSection('members',this)">
-        <span class="nav-icon">👥</span> Miembros
-      </a>
-      <a href="#" onclick="showSection('news',this)">
-        <span class="nav-icon">📢</span> Noticias
-      </a>
-      <a href="#" onclick="showSection('guides',this)">
-        <span class="nav-icon">📖</span> Guías
-      </a>
-      <a href="#" onclick="showSection('gallery',this)">
-        <span class="nav-icon">🖼️</span> Galería
-      </a>
-      <a href="#" onclick="showSection('usuarios',this)">
-        <span class="nav-icon">👤</span> Usuarios
-      </a>
-      <a href="index.html" target="_blank" style="margin-top:1rem;">
-        <span class="nav-icon">🌐</span> Ver sitio
-      </a>
+      <a href="#" class="active" onclick="showSection('dashboard',this)"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a href="#" onclick="showSection('members',this)"><span class="nav-icon">⚔️</span> Miembros</a>
+      <a href="#" onclick="showSection('news',this)"><span class="nav-icon">📢</span> Noticias</a>
+      <a href="#" onclick="showSection('guides',this)"><span class="nav-icon">📖</span> Guías</a>
+      <a href="#" onclick="showSection('gallery',this)"><span class="nav-icon">🖼️</span> Galería</a>
+      <a href="#" onclick="showSection('usuarios',this)"><span class="nav-icon">👥</span> Usuarios</a>
+      <a href="index.html" target="_blank" style="margin-top:1rem;"><span class="nav-icon">🌐</span> Ver sitio</a>
     </nav>
     <div class="sidebar-footer">
+      <div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.5rem;" id="adminUserLabel"></div>
       <a href="#" onclick="doLogout()">⏻ &nbsp;Cerrar sesión</a>
     </div>
   </aside>
 
-  <!-- Main -->
   <main class="admin-main">
-    <!-- Banner: modo online vs local -->
-    <div id="onlineBanner" style="display:none;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:0.9rem 1.2rem;margin-bottom:1.5rem;font-size:0.83rem;color:#C9A84C;display:flex;align-items:center;gap:0.8rem;">
-      <span style="font-size:1.2rem;">⚠️</span>
-      <div>
-        <strong>Modo online</strong> — Los cambios de Miembros, Noticias, Guías y Galería solo se guardan cuando usas el admin en <strong>localhost:3333</strong> con el servidor local corriendo. En Netlify solo funciona la gestión de <strong>Usuarios</strong>.
-        <br><span style="opacity:0.7;font-size:0.75rem;">Para guardar contenido: edita en localhost → git push → Netlify se actualiza automáticamente.</span>
-      </div>
-    </div>
 
     <!-- Dashboard -->
     <div class="admin-section active" id="sec-dashboard">
-      <div class="page-header">
-        <div>
-          <h1>Dashboard</h1>
-          <p>Bienvenido al panel de Oblivion</p>
-        </div>
-      </div>
+      <div class="page-header"><div><h1>Dashboard</h1><p>Bienvenido al panel de Oblivion — todos los cambios se guardan automáticamente</p></div></div>
       <div class="stats-bar" id="dashStats"></div>
-      <p style="color:var(--gray);font-style:italic;font-size:0.85rem;">Usa la barra lateral para administrar el contenido del sitio.</p>
+      <p style="color:var(--gray);font-style:italic;font-size:0.85rem;margin-top:1rem;">Usa la barra lateral para administrar el contenido del sitio. Los cambios se guardan en tiempo real.</p>
     </div>
 
     <!-- Miembros -->
     <div class="admin-section" id="sec-members">
       <div class="page-header">
-        <div><h1>Miembros</h1><p>Gestiona los miembros de Oblivion</p></div>
+        <div><h1>Miembros</h1><p>Miembros visibles en la página principal</p></div>
         <button class="btn btn-primary" onclick="openMemberModal()">+ Nuevo miembro</button>
       </div>
       <div class="cards-grid" id="membersGrid"></div>
@@ -99,9 +73,7 @@
         <button class="btn btn-primary" onclick="openNewsModal()">+ Nueva noticia</button>
       </div>
       <table class="admin-table">
-        <thead>
-          <tr><th>Capítulo</th><th>Título</th><th>Categoría</th><th>Fecha</th><th>Acciones</th></tr>
-        </thead>
+        <thead><tr><th>Capítulo</th><th>Título</th><th>Categoría</th><th>Fecha</th><th>Acciones</th></tr></thead>
         <tbody id="newsTable"></tbody>
       </table>
     </div>
@@ -113,9 +85,7 @@
         <button class="btn btn-primary" onclick="openGuideModal()">+ Nueva guía</button>
       </div>
       <table class="admin-table">
-        <thead>
-          <tr><th>Juego</th><th>Título</th><th>Categoría</th><th>Autor</th><th>Acciones</th></tr>
-        </thead>
+        <thead><tr><th>Juego</th><th>Título</th><th>Categoría</th><th>Autor</th><th>Acciones</th></tr></thead>
         <tbody id="guidesTable"></tbody>
       </table>
     </div>
@@ -123,83 +93,60 @@
     <!-- Galería -->
     <div class="admin-section" id="sec-gallery">
       <div class="page-header">
-        <div><h1>Galería</h1><p>Imágenes y screenshots</p></div>
-        <button class="btn btn-primary" onclick="openGalleryModal()">+ Agregar imagen</button>
+        <div><h1>Galería</h1><p>Screenshots y arte del guild</p></div>
+        <button class="btn btn-primary" onclick="openGalleryAdd()">+ Agregar imagen</button>
       </div>
       <div class="cards-grid" id="galleryGrid"></div>
+    </div>
+
+    <!-- Usuarios (Supabase) -->
+    <div class="admin-section" id="sec-usuarios">
+      <div class="page-header">
+        <div><h1>Usuarios</h1><p>Miembros registrados — aprobación y gestión</p></div>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <select id="userRoleFilter" onchange="filterUsers()" style="background:var(--card);border:1px solid var(--border);color:var(--lgray);padding:0.4rem 0.7rem;border-radius:6px;font-size:0.78rem;">
+            <option value="">Todos</option>
+            <option value="pending">Pendientes</option>
+            <option value="member">Miembros</option>
+            <option value="officer">Officers</option>
+            <option value="admin">Admins</option>
+          </select>
+          <button class="btn btn-secondary" onclick="loadUsers()">↻</button>
+        </div>
+      </div>
+      <div id="usersGrid"></div>
     </div>
 
   </main>
 </div>
 
-<!-- ══ MODAL MIEMBRO ══ -->
+<!-- ══ MODALES MIEMBRO ══ -->
 <div class="modal-overlay" id="memberModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="memberModalTitle">Nuevo Miembro</div>
+      <div class="modal-title" id="memberModalTitle">Miembro</div>
       <button class="modal-close" onclick="closeModal('memberModal')">✕</button>
     </div>
-
-    <input type="hidden" id="mIdx" value="-1">
-
+    <input type="hidden" id="mDbId" value="">
     <div class="form-grid">
-      <div class="form-group">
-        <label>Nickname</label>
-        <input type="text" id="mNick" placeholder="Nombre en juego">
+      <div class="form-group"><label>Nickname</label><input type="text" id="mNick" placeholder="Nombre en juego"></div>
+      <div class="form-group"><label>Badge</label>
+        <select id="mBadge"><option value="master">Guild Master</option><option value="officer">Officer</option><option value="member" selected>Member</option></select>
       </div>
-      <div class="form-group">
-        <label>Rol</label>
-        <select id="mBadge">
-          <option value="master">Guild Master</option>
-          <option value="officer">Officer</option>
-          <option value="member" selected>Member</option>
-        </select>
+      <div class="form-group"><label>Especialidad</label><input type="text" id="mSpecialty" placeholder="DPS / Tank..."></div>
+      <div class="form-group"><label>Armas</label><input type="text" id="mWeapons" placeholder="Greatsword · Dagger"></div>
+      <div class="form-group"><label>Estado</label>
+        <select id="mStatus"><option value="active">Activo</option><option value="veteran">Veterano</option></select>
       </div>
-      <div class="form-group">
-        <label>Especialidad</label>
-        <input type="text" id="mSpecialty" placeholder="DPS / Tank / Support...">
-      </div>
-      <div class="form-group">
-        <label>Armas</label>
-        <input type="text" id="mWeapons" placeholder="Greatsword · Dagger">
-      </div>
-      <div class="form-group">
-        <label>Estado</label>
-        <select id="mStatus">
-          <option value="active">Activo</option>
-          <option value="veteran">Veterano</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Imagen (ruta)</label>
-        <input type="text" id="mImage" placeholder="assets/characters/nombre.png">
-      </div>
+      <div class="form-group"><label>Imagen (ruta)</label><input type="text" id="mImage" placeholder="assets/characters/nombre.png"></div>
     </div>
-
     <div class="form-grid full">
-      <div class="form-group">
-        <label>Subir imagen</label>
-        <div class="img-preview-wrap">
-          <div class="img-preview"><img id="mImgPreview" src="" alt="" style="display:none;"></div>
-          <div class="img-upload-controls">
-            <input type="file" id="mImgFile" accept="image/*" onchange="previewImg(this)">
-            <button class="btn btn-secondary btn-sm" onclick="uploadImg()">⬆ Subir</button>
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Bio</label>
-        <textarea id="mBio" placeholder="Descripción del miembro..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>Quote</label>
-        <input type="text" id="mQuote" placeholder="Su frase...">
-      </div>
+      <div class="form-group"><label>Bio</label><textarea id="mBio" placeholder="Descripción..."></textarea></div>
+      <div class="form-group"><label>Quote</label><input type="text" id="mQuote" placeholder="Su frase..."></div>
     </div>
-
     <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;">
       <button class="btn btn-secondary" onclick="closeModal('memberModal')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveMember()">Guardar</button>
+      <button class="btn btn-primary" onclick="saveMember()">💾 Guardar</button>
     </div>
   </div>
 </div>
@@ -208,52 +155,28 @@
 <div class="modal-overlay" id="newsModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="newsModalTitle">Nueva Noticia</div>
+      <div class="modal-title" id="newsModalTitle">Noticia</div>
       <button class="modal-close" onclick="closeModal('newsModal')">✕</button>
     </div>
-    <input type="hidden" id="nIdx" value="-1">
+    <input type="hidden" id="nDbId" value="">
     <div class="form-grid">
-      <div class="form-group">
-        <label>Capítulo</label>
-        <input type="text" id="nChapter" placeholder="Capítulo I">
+      <div class="form-group"><label>Capítulo</label><input type="text" id="nChapter" placeholder="Capítulo I"></div>
+      <div class="form-group"><label>Categoría</label>
+        <select id="nCategory"><option value="guild">Guild</option><option value="manga">Manga</option><option value="juego">Juego</option></select>
       </div>
-      <div class="form-group">
-        <label>Categoría</label>
-        <select id="nCategory">
-          <option value="guild">Guild</option>
-          <option value="manga">Manga</option>
-          <option value="juego">Juego</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Título</label>
-        <input type="text" id="nTitle" placeholder="Título de la noticia">
-      </div>
-      <div class="form-group">
-        <label>Fecha</label>
-        <input type="text" id="nDate" placeholder="2024">
-      </div>
-      <div class="form-group">
-        <label>Imagen (ruta)</label>
-        <input type="text" id="nImg" placeholder="manga/cap01/01.png (opcional)">
-      </div>
-      <div class="form-group">
-        <label>Destacada</label>
-        <select id="nFeatured">
-          <option value="false">No</option>
-          <option value="true">Sí</option>
-        </select>
+      <div class="form-group"><label>Título</label><input type="text" id="nTitle"></div>
+      <div class="form-group"><label>Fecha</label><input type="text" id="nDate" placeholder="2024"></div>
+      <div class="form-group"><label>Imagen (ruta)</label><input type="text" id="nImg" placeholder="manga/cap01/01.png"></div>
+      <div class="form-group"><label>Destacada</label>
+        <select id="nFeatured"><option value="false">No</option><option value="true">Sí</option></select>
       </div>
     </div>
     <div class="form-grid full">
-      <div class="form-group">
-        <label>Descripción</label>
-        <textarea id="nDesc" placeholder="Contenido de la noticia..."></textarea>
-      </div>
+      <div class="form-group"><label>Descripción</label><textarea id="nDesc"></textarea></div>
     </div>
     <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;">
       <button class="btn btn-secondary" onclick="closeModal('newsModal')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveNews()">Guardar</button>
+      <button class="btn btn-primary" onclick="saveNews()">💾 Guardar</button>
     </div>
   </div>
 </div>
@@ -262,135 +185,68 @@
 <div class="modal-overlay" id="guideModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="guideModalTitle">Nueva Guía</div>
+      <div class="modal-title" id="guideModalTitle">Guía</div>
       <button class="modal-close" onclick="closeModal('guideModal')">✕</button>
     </div>
-    <input type="hidden" id="gIdx" value="-1">
+    <input type="hidden" id="gDbId" value="">
     <div class="form-grid">
-      <div class="form-group">
-        <label>Juego</label>
-        <input type="text" id="gGame" placeholder="Throne and Liberty">
-      </div>
-      <div class="form-group">
-        <label>Abreviación</label>
-        <input type="text" id="gGameShort" placeholder="TL">
-      </div>
-      <div class="form-group">
-        <label>Categoría</label>
-        <input type="text" id="gCategory" placeholder="Siege / Build / Reglas...">
-      </div>
-      <div class="form-group">
-        <label>Autor</label>
-        <input type="text" id="gAuthor" placeholder="Corvo">
-      </div>
-      <div class="form-group">
-        <label>Título</label>
-        <input type="text" id="gTitle" placeholder="Título de la guía">
-      </div>
-      <div class="form-group">
-        <label>Fecha</label>
-        <input type="text" id="gDate" placeholder="2024">
-      </div>
+      <div class="form-group"><label>Juego</label><input type="text" id="gGame" placeholder="Throne and Liberty"></div>
+      <div class="form-group"><label>Abreviación</label><input type="text" id="gGameShort" placeholder="TL"></div>
+      <div class="form-group"><label>Categoría</label><input type="text" id="gCategory" placeholder="Siege / Build..."></div>
+      <div class="form-group"><label>Autor</label><input type="text" id="gAuthor"></div>
+      <div class="form-group"><label>Título</label><input type="text" id="gTitle"></div>
+      <div class="form-group"><label>Fecha</label><input type="text" id="gDate" placeholder="2024"></div>
     </div>
     <div class="form-grid full">
-      <div class="form-group">
-        <label>Descripción corta</label>
-        <input type="text" id="gDesc" placeholder="Resumen de la guía...">
-      </div>
-      <div class="form-group">
-        <label>Contenido completo</label>
-        <textarea id="gContent" style="height:120px;" placeholder="Contenido detallado de la guía..."></textarea>
-      </div>
+      <div class="form-group"><label>Descripción corta</label><input type="text" id="gDesc"></div>
+      <div class="form-group"><label>Contenido completo</label><textarea id="gContent" style="height:120px;"></textarea></div>
     </div>
     <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;">
       <button class="btn btn-secondary" onclick="closeModal('guideModal')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveGuide()">Guardar</button>
+      <button class="btn btn-primary" onclick="saveGuide()">💾 Guardar</button>
     </div>
   </div>
 </div>
 
-    <!-- Usuarios (Supabase) -->
-    <div class="admin-section" id="sec-usuarios">
-      <div class="page-header">
-        <div><h1>Usuarios</h1><p>Gestiona los miembros registrados en Oblivion</p></div>
-        <div style="display:flex;gap:0.5rem;align-items:center;">
-          <select id="userRoleFilter" onchange="filterUsers()" style="background:var(--card);border:1px solid var(--border);color:var(--lgray);padding:0.4rem 0.7rem;border-radius:6px;font-size:0.78rem;">
-            <option value="">Todos los roles</option>
-            <option value="pending">Pendientes</option>
-            <option value="member">Miembros</option>
-            <option value="officer">Officers</option>
-            <option value="admin">Admins</option>
-          </select>
-          <button class="btn btn-secondary" onclick="loadUsers()">↻ Refrescar</button>
-        </div>
-      </div>
-      <div id="supabaseAuthNotice" style="display:none;background:rgba(139,42,200,0.08);border:1px solid rgba(139,42,200,0.2);border-radius:8px;padding:1.2rem;margin-bottom:1.5rem;font-size:0.85rem;color:#c080ff;">
-        ⚠️ Debes estar logueado en el sitio como admin para gestionar usuarios.
-        <a href="login.html" style="color:#C9A84C;font-weight:700;">Iniciar sesión →</a>
-      </div>
-      <div id="usersGrid"></div>
-    </div>
-
-<!-- Modal dar coins -->
+<!-- Coins / Achievement modals (usuarios) -->
 <div class="modal-overlay" id="coinsModal">
   <div class="modal" style="max-width:420px;">
-    <div class="modal-header">
-      <div class="modal-title">Dar GuildCoins</div>
-      <button class="modal-close" onclick="closeModal('coinsModal')">✕</button>
-    </div>
+    <div class="modal-header"><div class="modal-title">Dar GuildCoins</div><button class="modal-close" onclick="closeModal('coinsModal')">✕</button></div>
     <input type="hidden" id="coinsUserId">
-    <div class="form-group" style="margin-bottom:1rem;">
-      <label>Usuario</label>
-      <input type="text" id="coinsUserName" disabled style="opacity:0.6;">
-    </div>
+    <div class="form-group" style="margin-bottom:1rem;"><label>Usuario</label><input type="text" id="coinsUserName" disabled style="opacity:0.6;"></div>
     <div class="form-grid">
-      <div class="form-group">
-        <label>Cantidad (positivo = dar, negativo = quitar)</label>
-        <input type="number" id="coinsAmount" placeholder="ej: 50 o -10" value="50">
-      </div>
-      <div class="form-group">
-        <label>Razón</label>
-        <input type="text" id="coinsReason" placeholder="Asistencia a siege...">
-      </div>
+      <div class="form-group"><label>Cantidad</label><input type="number" id="coinsAmount" value="50"></div>
+      <div class="form-group"><label>Razón</label><input type="text" id="coinsReason" placeholder="Asistencia siege..."></div>
     </div>
     <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;">
       <button class="btn btn-secondary" onclick="closeModal('coinsModal')">Cancelar</button>
-      <button class="btn btn-primary" onclick="confirmGiveCoins()">Dar Coins</button>
+      <button class="btn btn-primary" onclick="confirmGiveCoins()">💾 Dar Coins</button>
     </div>
   </div>
 </div>
 
-<!-- Modal dar logro -->
 <div class="modal-overlay" id="achieveModal">
   <div class="modal" style="max-width:420px;">
-    <div class="modal-header">
-      <div class="modal-title">Dar Logro</div>
-      <button class="modal-close" onclick="closeModal('achieveModal')">✕</button>
-    </div>
+    <div class="modal-header"><div class="modal-title">Dar Logro</div><button class="modal-close" onclick="closeModal('achieveModal')">✕</button></div>
     <input type="hidden" id="achieveUserId">
-    <div class="form-group" style="margin-bottom:1rem;">
-      <label>Usuario</label>
-      <input type="text" id="achieveUserName" disabled style="opacity:0.6;">
-    </div>
-    <div class="form-group">
-      <label>Logro</label>
+    <div class="form-group" style="margin-bottom:1rem;"><label>Usuario</label><input type="text" id="achieveUserName" disabled style="opacity:0.6;"></div>
+    <div class="form-group"><label>Logro</label>
       <select id="achieveKey">
         <option value="founder">🌟 Fundador</option>
         <option value="stonegard_conqueror">🏰 Conquistador de Stonegard</option>
         <option value="veteran">⚔️ Veterano</option>
-        <option value="event_5">📅 Comprometido (5 eventos)</option>
-        <option value="event_20">🔥 Guerrero de Guild (20 eventos)</option>
-        <option value="manga_reader">📖 Cronista (leyó el manga)</option>
+        <option value="event_5">📅 Comprometido</option>
+        <option value="event_20">🔥 Guerrero de Guild</option>
+        <option value="manga_reader">📖 Cronista</option>
       </select>
     </div>
     <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;">
       <button class="btn btn-secondary" onclick="closeModal('achieveModal')">Cancelar</button>
-      <button class="btn btn-primary" onclick="confirmGiveAchievement()">Dar Logro</button>
+      <button class="btn btn-primary" onclick="confirmGiveAchievement()">💾 Dar Logro</button>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

@@ -157,13 +157,14 @@ const io = new IntersectionObserver(entries => {
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// ── NEWS ──
-fetch('data/news.json')
-  .then(r => r.json())
-  .then(data => {
+// ── NEWS (desde Supabase) ──
+_newsPromise.then(({ data }) => {
     const grid = document.getElementById('newsGrid');
-    if (!grid) return;
-    data.posts.forEach((p, i) => {
+    if (!grid || !data) return;
+    const posts = data;
+    posts.forEach((p, i) => {
+      // Mapear campos de Supabase al formato esperado
+      p.desc = p.description; p.date = p.date_label; p.img = p.image_url;
       const delay = (i % 3) * 0.1;
       const catLabel = { guild:'Guild', manga:'Manga', juego:'Juego' }[p.category] || p.category;
       const cover = p.img
@@ -190,38 +191,27 @@ fetch('data/news.json')
 let galleryItems = [];
 let lbIndex = 0;
 
-fetch('data/gallery.json')
-  .then(r => r.json())
-  .then(data => {
+sb.from('content_gallery').select('*').eq('is_empty', false).order('sort_order').then(({ data }) => {
     const grid = document.getElementById('galleryGrid');
-    if (!grid) return;
-    // Filter real items (with img) for lightbox navigation
-    galleryItems = data.items.filter(item => !item.empty && item.img);
+    if (!grid || !data) return;
+    galleryItems = data.filter(item => item.image_url);
 
-    data.items.forEach((item, i) => {
+    data.forEach((item, i) => {
       const delay = (i % 4) * 0.07;
-      if (item.empty) {
-        grid.innerHTML += `<div class="gallery-empty reveal" style="transition-delay:${delay}s">+</div>`;
-        return;
-      }
       const lbIdx = galleryItems.findIndex(g => g.id === item.id);
       grid.innerHTML += `
       <div class="gallery-item reveal" style="transition-delay:${delay}s" data-lb="${lbIdx}">
-        <img class="gallery-img" src="${item.img}" alt="${item.title || ''}" loading="lazy">
+        <img class="gallery-img" src="${item.image_url}" alt="${item.title || ''}" loading="lazy">
         <div class="gallery-overlay">
           <div class="gallery-title">${item.title || ''}</div>
-          <div class="gallery-desc">${item.desc || ''}</div>
+          <div class="gallery-desc">${item.description || ''}</div>
         </div>
         <div class="gallery-zoom">⤢</div>
-        ${item.placeholder ? '<div class="gallery-placeholder-label">· Placeholder ·</div>' : ''}
       </div>`;
     });
-
-    // Click handlers
     grid.querySelectorAll('.gallery-item').forEach(el => {
       el.addEventListener('click', () => openLightbox(parseInt(el.dataset.lb)));
     });
-
     grid.querySelectorAll('.reveal').forEach(el => io.observe(el));
   });
 
@@ -238,9 +228,9 @@ function closeLightbox() {
 function updateLightbox() {
   const item = galleryItems[lbIndex];
   if (!item) return;
-  document.getElementById('lbImg').src = item.img;
+  document.getElementById('lbImg').src = item.image_url || item.img || '';
   document.getElementById('lbCaption').textContent = item.title || '';
-  document.getElementById('lbSub').textContent = item.desc || '';
+  document.getElementById('lbSub').textContent = item.description || item.desc || '';
   document.getElementById('lbPrev').style.opacity = lbIndex > 0 ? '1' : '0.2';
   document.getElementById('lbNext').style.opacity = lbIndex < galleryItems.length - 1 ? '1' : '0.2';
 }
@@ -257,14 +247,13 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' && lbIndex < galleryItems.length - 1) { lbIndex++; updateLightbox(); }
 });
 
-// ── MEMBERS ──
-fetch('data/members.json')
-  .then(r => r.json())
-  .then(data => {
+// ── MEMBERS (Supabase) ──
+sb.from('content_members').select('*').order('sort_order').then(({ data }) => {
     const grid = document.getElementById('membersGrid');
-    if (!grid) return;
+    if (!grid || !data) return;
 
-    data.members.forEach((m, idx) => {
+    data.forEach((m, idx) => {
+      m.image = m.image_url; m.badge = m.badge || 'member';
       const delay = (idx % 4) * 0.08;
 
       // ── Card mística (Scions / sin imagen) ──
@@ -332,26 +321,23 @@ fetch('data/members.json')
     grid.querySelectorAll('.reveal').forEach(el => io.observe(el));
   });
 
-// ── GUIDES ──
-fetch('data/guides.json')
-  .then(r => r.json())
-  .then(data => {
+// ── GUIDES (Supabase) ──
+sb.from('content_guides').select('*').order('sort_order').then(({ data }) => {
     const grid = document.getElementById('guidesGrid');
-    if (!grid) return;
-    const guides = data.guides || [];
-    guides.forEach((g, i) => {
+    if (!grid || !data) return;
+    data.forEach((g, i) => {
       const delay = (i % 3) * 0.1;
       grid.innerHTML += `
       <div class="guide-card reveal" style="transition-delay:${delay}s">
         <div class="guide-header">
-          <span class="guide-game-badge">${g.gameShort || g.game}</span>
+          <span class="guide-game-badge">${g.game_short || g.game}</span>
           <span class="guide-cat">${g.category}</span>
           <span class="guide-author">${g.author}</span>
         </div>
         <div class="guide-title">${g.title}</div>
-        <div class="guide-desc">${g.desc}</div>
+        <div class="guide-desc">${g.description}</div>
         <div class="guide-footer">
-          <span class="guide-date">${g.date}</span>
+          <span class="guide-date">${g.date_label}</span>
           <a class="guide-link" href="#" onclick="return false;">Ver guía &rarr;</a>
         </div>
       </div>`;
