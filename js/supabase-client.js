@@ -130,7 +130,8 @@ async function initNavAuth() {
     if (!el) return;
     if (session && profile) {
       const approved = ['member','officer','admin'].includes(profile.role);
-      el.innerHTML = approved ? `
+      const isStaff  = ['officer','admin'].includes(profile.role);
+      el.innerHTML = (approved ? `
         <a href="profile.html" class="nav-user-pill">
           <div class="nav-avatar-circle">${(profile.nickname||'?')[0].toUpperCase()}</div>
           <span>${profile.nickname || 'Miembro'}</span>
@@ -139,7 +140,8 @@ async function initNavAuth() {
         `<a href="profile.html" class="nav-user-pill pending">
           <div class="nav-avatar-circle">⏳</div>
           <span>Pendiente</span>
-        </a>`;
+        </a>`)
+        + (isStaff ? `<a href="admin.html" class="btn-nav-admin" title="Panel de Admin">⚙</a>` : '');
     } else {
       el.innerHTML = `<a href="login.html" class="btn-nav-login">Entrar</a>`;
     }

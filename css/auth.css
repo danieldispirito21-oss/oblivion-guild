@@ -168,6 +168,20 @@ body {
 .nav-coins { font-size: 0.65rem !important; color: var(--lgray) !important; }
 .nav-user-pill.pending .nav-avatar-circle { background: var(--gray); }
 
+/* Admin gear button — solo visible para officers/admin */
+.btn-nav-admin {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2);
+  color: var(--gold); font-size: 1.05rem; text-decoration: none;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.btn-nav-admin:hover {
+  background: rgba(201,168,76,0.2); border-color: var(--gold);
+  transform: rotate(60deg); color: var(--gold-l);
+}
+
 /* ── PROFILE PAGE ── */
 .profile-page { min-height: 100vh; padding-top: 80px; }
 

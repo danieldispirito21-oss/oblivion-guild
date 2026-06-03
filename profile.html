@@ -19,6 +19,11 @@
       <a href="index.html" style="font-family:'Cinzel',serif;font-size:1.2rem;font-weight:900;color:#C9A84C;text-decoration:none;letter-spacing:0.2em;">OBLIVION</a>
     </div>
     <div id="navAuthArea"></div>
+    <div id="adminNavBtn" style="display:none;">
+      <a href="admin.html" style="display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.8rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.25);border-radius:8px;color:#C9A84C;text-decoration:none;font-size:0.75rem;font-family:'Cinzel',serif;letter-spacing:0.08em;transition:all 0.3s;">
+        ⚙ Admin
+      </a>
+    </div>
     <button onclick="Auth.logout()" style="font-family:'Cinzel',serif;font-size:0.7rem;color:#666680;background:none;border:none;cursor:pointer;letter-spacing:0.1em;">Salir</button>
   </nav>
 
@@ -202,6 +207,12 @@ function updateNavAuth(session, profile) {
   const el = document.getElementById('navAuthArea');
   if (!el || !profile) return;
   el.innerHTML = `<span style="font-size:0.78rem;color:#C9A84C;font-family:'Cinzel',serif;">${profile.nickname || 'Miembro'}</span>`;
+
+  // Mostrar botón Admin si es officer o admin
+  const adminBtn = document.getElementById('adminNavBtn');
+  if (adminBtn && ['officer','admin'].includes(profile.role)) {
+    adminBtn.style.display = 'block';
+  }
 }
 
 async function loadAchievements(userId) {
