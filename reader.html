@@ -24,12 +24,23 @@
 
   <!-- PAGE -->
   <main class="reader-main" id="readerMain">
-    <img id="readerImg" class="reader-page-img" src="" alt="Página del manga">
+    <div class="reader-img-wrap" id="imgWrap">
+      <img id="readerImg" class="reader-page-img zoom-fit" src="" alt="Página del manga">
+    </div>
   </main>
 
   <!-- BOTTOM BAR -->
   <div class="reader-bottombar">
     <button class="reader-btn" id="btnPrev">&#8592; Anterior</button>
+
+    <!-- Zoom controls -->
+    <div class="reader-zoom-bar">
+      <button class="reader-btn reader-zoom-btn" id="btnZoomOut" title="Alejar (Ctrl+Rueda)">−</button>
+      <span class="reader-zoom-level" id="zoomDisplay" title="Doble clic en imagen para zoom rápido">100%</span>
+      <button class="reader-btn reader-zoom-btn" id="btnZoomIn"  title="Acercar (Ctrl+Rueda)">+</button>
+      <button class="reader-btn reader-zoom-btn" id="btnZoomFit" title="Ajustar a pantalla">⊡</button>
+    </div>
+
     <span class="reader-counter" id="pageCounter">— / —</span>
     <button class="reader-btn" id="btnNext">Siguiente &#8594;</button>
   </div>
