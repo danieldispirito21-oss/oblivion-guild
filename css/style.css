@@ -582,6 +582,57 @@ footer {
 .footer-links a:hover { color:var(--gold); }
 .footer-copy { font-size:0.68rem; color:rgba(100,100,120,0.5); }
 
+/* ── HOUSE SWITCHER (Oblivion ↔ Aeternum) ── */
+.nav-houses {
+  display: flex; align-items: center; gap: 0.15rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 30px; padding: 0.18rem 0.2rem;
+  margin-right: auto;
+}
+.nav-house {
+  display: flex; align-items: center; gap: 0.45rem;
+  padding: 0.28rem 0.8rem; border-radius: 22px;
+  font-family: 'Cinzel', serif; font-size: 0.82rem;
+  font-weight: 900; letter-spacing: 0.1em;
+  text-decoration: none; cursor: default;
+  transition: all var(--ease); white-space: nowrap;
+}
+.nav-house img { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
+
+/* Casa activa — Oblivion */
+.nav-house.active-oblivion {
+  background: rgba(201,168,76,0.1);
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.18);
+}
+.nav-house.active-oblivion img {
+  filter: drop-shadow(0 0 6px rgba(0,153,238,0.5)) drop-shadow(0 0 2px rgba(201,168,76,0.3));
+}
+
+/* Casa activa — Aeternum */
+.nav-house.active-aeternum {
+  background: rgba(72,202,228,0.08);
+  color: #48CAE4;
+  border: 1px solid rgba(72,202,228,0.18);
+}
+.nav-house.active-aeternum img {
+  filter: drop-shadow(0 0 8px rgba(72,202,228,0.6)) drop-shadow(0 0 3px rgba(244,168,42,0.2));
+}
+
+/* Casa inactiva (clickeable, lleva a la otra) */
+a.nav-house.inactive {
+  color: rgba(255,255,255,0.28); cursor: pointer;
+  border: 1px solid transparent;
+}
+a.nav-house.inactive img { filter: grayscale(0.6) opacity(0.45); transition: filter var(--ease); }
+a.nav-house.inactive:hover {
+  color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.08);
+}
+a.nav-house.inactive:hover img { filter: grayscale(0) opacity(0.85); }
+
 /* ── DISCORD NAV BUTTON ── */
 .nav-discord {
   display: flex; align-items: center; gap: 0.45rem;
