@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AETERNUM — Casa Aliada de Oblivion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Lato:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── AETERNUM OVERRIDES ── */
+    :root {
+      --aeter-cyan:   #48CAE4;
+      --aeter-blue:   #0077B6;
+      --aeter-deep:   #010B18;
+      --aeter-gold:   #F4A82A;
+      --aeter-purple: #4361EE;
+      --aeter-light:  #ADE8F4;
+    }
+
+    /* Partículas con tinte azul */
+    body { background: var(--aeter-deep); }
+
+    /* ── NAV AETERNUM ── */
+    #navbar { background: rgba(1,11,24,0.5); border-bottom-color: rgba(72,202,228,0.1); }
+    #navbar.scrolled { background: rgba(1,11,24,0.95); border-bottom-color: rgba(72,202,228,0.18); }
+    .nav-logo { color: var(--aeter-cyan); text-shadow: 0 0 20px rgba(72,202,228,0.4); }
+    .nav-links a:hover { color: var(--aeter-cyan); border-bottom-color: rgba(72,202,228,0.4); }
+    .btn-nav-login { color: var(--aeter-cyan); border-color: rgba(72,202,228,0.35); background: rgba(72,202,228,0.06); }
+    .btn-nav-login:hover { background: rgba(72,202,228,0.14); border-color: var(--aeter-cyan); }
+
+    /* ── HERO AETERNUM ── */
+    .aeter-hero-eyes .hero-eye {
+      background: radial-gradient(ellipse at center,
+        rgba(72,202,228,0.45) 0%, rgba(67,97,238,0.25) 35%, transparent 70%);
+    }
+
+    /* AETERNUM title — gradient cyan to gold */
+    .aeter-title {
+      display: flex; justify-content: center; align-items: baseline;
+      flex-wrap: nowrap; gap: 0.02em; margin-bottom: 0.5rem;
+      filter: drop-shadow(0 0 60px rgba(72,202,228,0.2));
+      position: relative;
+    }
+    .aeter-letter {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(3.5rem, 10vw, 8.5rem);
+      font-weight: 900; display: inline-block; line-height: 1;
+      background: linear-gradient(180deg,
+        #FFFFFF  0%, #ADE8F4 15%, #48CAE4 38%, #0077B6 60%, #4361EE 78%, #F4A82A 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: letterIn 0.9s calc(var(--i,0) * 0.065s) cubic-bezier(.2,1.2,.4,1) both;
+      position: relative; transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    .aeter-letter:first-child,
+    .aeter-letter:last-child {
+      filter: drop-shadow(0 0 8px rgba(72,202,228,0.3));
+      animation: letterIn 0.9s calc(var(--i,0)*0.065s) cubic-bezier(.2,1.2,.4,1) both,
+                 aeterEdgePulse 4s 2s ease-in-out infinite;
+    }
+    @keyframes aeterEdgePulse {
+      0%,100% { filter: drop-shadow(0 0 8px rgba(72,202,228,0.25)); }
+      50%      { filter: drop-shadow(0 0 16px rgba(72,202,228,0.55)); }
+    }
+
+    /* Canvas chispas Aeternum */
+    #aeterSparkCanvas {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 3; overflow: visible;
+    }
+
+    /* ── TAGLINE ── */
+    .aeter-tagline {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.65rem, 1.4vw, 0.9rem);
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: rgba(72,202,228,0.5); margin-bottom: 2rem;
+      animation: fadeUp 1s 0.6s ease both;
+    }
+
+    /* ── SECTIONS ── */
+    section:nth-child(even) { background: rgba(1,10,24,0.9); }
+    section:nth-child(odd)  { background: rgba(1,8,20,0.82); }
+    section::before {
+      background: linear-gradient(to right,
+        transparent, rgba(72,202,228,0.15), rgba(244,168,42,0.1), transparent);
+    }
+
+    /* Section eyebrow — cyan */
+    .section-eyebrow { color: var(--aeter-cyan); text-shadow: 0 0 12px rgba(72,202,228,0.4); }
+    .section-eyebrow { border-bottom-color: rgba(72,202,228,0.2); }
+
+    /* ── SOBRE AETERNUM ── */
+    .aeter-about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+      max-width: 1000px; margin: 0 auto; align-items: center;
+    }
+    .aeter-logo-display {
+      display: flex; justify-content: center; align-items: center;
+      position: relative;
+    }
+    .aeter-logo-display img {
+      width: 260px; height: 260px; object-fit: contain;
+      filter: drop-shadow(0 0 30px rgba(72,202,228,0.6)) drop-shadow(0 0 60px rgba(244,168,42,0.2));
+      animation: alienFloat 5s ease-in-out infinite;
+    }
+    /* Rune circle behind logo */
+    .aeter-logo-display .rune-ring {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      border: 1px solid rgba(72,202,228,0.1);
+      animation: runeRotate 30s linear infinite;
+    }
+    .aeter-logo-display .rune-ring::after {
+      content: ''; position: absolute; inset: 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(72,202,228,0.06);
+    }
+    @keyframes runeRotate { from {transform: translate(-50%,-50%) rotate(0deg);} to {transform: translate(-50%,-50%) rotate(360deg);} }
+
+    .aeter-text h3 { font-size: 1.8rem; color: var(--white); margin-bottom: 1.2rem; }
+    .aeter-text p { color: var(--lgray); line-height: 1.9; margin-bottom: 1rem; }
+    .aeter-values { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.5rem; }
+    .aeter-value {
+      background: rgba(72,202,228,0.04);
+      border: 1px solid rgba(72,202,228,0.1);
+      border-radius: 10px; padding: 1rem;
+      transition: all 0.3s;
+    }
+    .aeter-value:hover { border-color: rgba(72,202,228,0.25); background: rgba(72,202,228,0.07); }
+    .aeter-value-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .aeter-value-name { font-family: 'Cinzel', serif; font-size: 0.82rem; color: var(--aeter-cyan); margin-bottom: 0.2rem; }
+    .aeter-value-desc { font-size: 0.76rem; color: var(--gray); }
+
+    /* ── AION 2 CARD ── */
+    .aion-card {
+      max-width: 700px; margin: 0 auto;
+      background: linear-gradient(135deg, #010B18, #020E22);
+      border: 1px solid rgba(72,202,228,0.18);
+      border-radius: 16px; padding: 2.5rem; text-align: center;
+    }
+    .aion-card:hover { border-color: rgba(72,202,228,0.4); transform: translateY(-4px); }
+    .aion-badge {
+      display: inline-block; font-size: 0.6rem; letter-spacing: 0.2em;
+      text-transform: uppercase; padding: 0.2rem 0.7rem; border-radius: 20px;
+      background: linear-gradient(90deg, rgba(72,202,228,0.1), rgba(67,97,238,0.1));
+      color: var(--aeter-cyan); border: 1px solid rgba(72,202,228,0.25);
+      margin-bottom: 1.2rem;
+    }
+    .aion-title { font-family: 'Cinzel', serif; font-size: 2rem; color: var(--white); margin-bottom: 0.5rem; }
+    .aion-dev { font-size: 0.75rem; letter-spacing: 0.15em; color: var(--gray); margin-bottom: 1.2rem; }
+    .aion-desc { font-size: 0.9rem; color: var(--lgray); line-height: 1.8; margin-bottom: 1.5rem; }
+    .aion-status {
+      display: inline-block; padding: 0.4rem 1.2rem;
+      background: rgba(72,202,228,0.08); border: 1px solid rgba(72,202,228,0.25);
+      border-radius: 20px; font-size: 0.7rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--aeter-cyan);
+      animation: aeterStatusPulse 3s ease infinite;
+    }
+
+    /* ── FOOTER AETERNUM ── */
+    .aeter-footer-back {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.6rem 1.4rem;
+      background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 8px; color: var(--gold); font-size: 0.78rem;
+      font-family: 'Cinzel', serif; letter-spacing: 0.1em; text-decoration: none;
+      transition: all 0.3s; margin-top: 1rem;
+    }
+    .aeter-footer-back:hover { background: rgba(201,168,76,0.15); border-color: var(--gold); }
+
+    /* Constellation floating background decorations */
+    .aeter-constellation {
+      position: absolute; pointer-events: none; opacity: 0.06; z-index: 0;
+    }
+
+    @media (max-width: 768px) {
+      .aeter-about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .aeter-values { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particles"></canvas>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo" style="display:flex;align-items:center;gap:0.65rem;margin-right:auto;">
+      <img src="assets/Logo-aeternum.svg" style="width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(72,202,228,0.6));" alt="">
+      AETERNUM
+    </div>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre Nosotros</a></li>
+      <li><a href="#juego">AION 2</a></li>
+      <li><a href="#reclutar">Únete</a></li>
+    </ul>
+    <a href="index.html" class="btn-nav-login" style="display:flex;align-items:center;gap:0.4rem;">
+      ← Oblivion
+    </a>
+    <div id="navAuthArea"></div>
+    <button class="nav-hamburger" id="hamburger">&#9776;</button>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <section id="hero" style="background:transparent;">
+    <div class="hero-nebula" style="background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(72,202,228,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 30% 10%, rgba(67,97,238,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 30% at 70% 10%, rgba(0,119,182,0.07) 0%, transparent 55%);"></div>
+    <div class="hero-eyes aeter-hero-eyes">
+      <div class="hero-eye"></div>
+      <div class="hero-eye"></div>
+    </div>
+    <div class="hero-mist"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow" style="color:rgba(72,202,228,0.7);">· Casa Aliada de Oblivion ·</div>
+
+      <div style="position:relative;display:inline-block;margin-bottom:0.5rem;">
+        <canvas id="aeterSparkCanvas"></canvas>
+        <h1 class="aeter-title" id="aeterTitle">
+          <span class="aeter-letter" style="--i:0">A</span><span class="aeter-letter" style="--i:1">E</span><span class="aeter-letter" style="--i:2">T</span><span class="aeter-letter" style="--i:3">E</span><span class="aeter-letter" style="--i:4">R</span><span class="aeter-letter" style="--i:5">N</span><span class="aeter-letter" style="--i:6">U</span><span class="aeter-letter" style="--i:7">M</span>
+        </h1>
+      </div>
+
+      <div class="aeter-tagline">AION 2 &nbsp;·&nbsp; Por las alas del infinito</div>
+      <div class="hero-divider" style="background:linear-gradient(to right, transparent, #48CAE4, #F4A82A, transparent);"></div>
+      <p class="hero-subtitle" style="color:var(--lgray);">
+        Donde Oblivion forjó un legado en la tierra,<br>
+        Aeternum lo llevará a los cielos.
+      </p>
+      <div class="hero-buttons" style="animation:fadeUp 1s 0.9s ease both;">
+        <a href="#sobre" class="btn" style="background:var(--aeter-cyan);color:#000;font-family:'Cinzel',serif;font-size:0.78rem;font-weight:700;letter-spacing:0.12em;padding:0.6rem 1.6rem;border-radius:10px;">
+          Conocer Aeternum
+        </a>
+        <a href="index.html" class="btn btn-secondary">← Volver a Oblivion</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-bar"></div>
+    </div>
+  </section>
+
+  <!-- ══ SOBRE AETERNUM ══ -->
+  <section id="sobre">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Quiénes Somos</div>
+      <h2>La Casa Aeternum</h2>
+      <p>El mismo ADN. Una nueva identidad. Listos para el siguiente mundo.</p>
+    </div>
+
+    <div class="aeter-about-grid">
+      <div class="aeter-logo-display reveal">
+        <div class="rune-ring"></div>
+        <img src="assets/Logo-aeternum.svg" alt="Aeternum">
+      </div>
+      <div class="aeter-text reveal">
+        <h3>Un nombre para la eternidad</h3>
+        <p>Aeternum no es solo un nombre — es una declaración. Donde Oblivion conquistó reinos desde las sombras, Aeternum los alcanzará desde las alturas.</p>
+        <p>Mismos jugadores. Mismo espíritu competitivo. Una identidad forjada para dominar los cielos de AION 2 cuando el mundo abra sus puertas.</p>
+        <div class="aeter-values">
+          <div class="aeter-value reveal reveal-delay-1">
+            <div class="aeter-value-icon">🌌</div>
+            <div class="aeter-value-name">Eternidad</div>
+            <div class="aeter-value-desc">Construimos para que dure.</div>
+          </div>
+          <div class="aeter-value reveal reveal-delay-2">
+            <div class="aeter-value-icon">🦅</div>
+            <div class="aeter-value-name">Vuelo</div>
+            <div class="aeter-value-desc">Siempre más alto que el resto.</div>
+          </div>
+          <div class="aeter-value reveal reveal-delay-1">
+            <div class="aeter-value-icon">∞</div>
+            <div class="aeter-value-name">Infinito</div>
+            <div class="aeter-value-desc">Sin límite para lo que somos.</div>
+          </div>
+          <div class="aeter-value reveal reveal-delay-2">
+            <div class="aeter-value-icon">⚔️</div>
+            <div class="aeter-value-name">Oblivion</div>
+            <div class="aeter-value-desc">El legado que nos precede.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ AION 2 ══ -->
+  <section id="juego">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">El Próximo Mundo</div>
+      <h2>AION 2</h2>
+      <p>El sucesor de un clásico. Aeternum estará ahí desde el primer día.</p>
+    </div>
+
+    <div class="aion-card reveal" style="transition:all 0.35s ease;">
+      <div class="aion-badge">MMORPG · NCSoft · Próximamente</div>
+      <div class="aion-title">AION 2</div>
+      <div class="aion-dev">Desarrollado por NCSoft</div>
+      <div class="aion-desc">
+        El sucesor espiritual del clásico AION. Vuelo libre, batallas a gran escala y un mundo
+        donde la magia y la guerra coexisten. Aeternum llega preparado — con el mismo instinto
+        estratégico que llevó a Oblivion al trono de Grinwell.
+      </div>
+      <div class="aion-status">✦ En seguimiento — preparando la llegada</div>
+    </div>
+  </section>
+
+  <!-- ══ ÚNETE ══ -->
+  <section id="reclutar">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Reclutamiento</div>
+      <h2>¿Eres de Aeternum?</h2>
+      <p>Cuando el mundo abra, estaremos listos. ¿Estarás tú?</p>
+    </div>
+
+    <div style="max-width:560px;margin:0 auto;text-align:center;" class="reveal">
+      <div style="background:rgba(1,11,24,0.8);border:1px solid rgba(72,202,228,0.15);border-radius:16px;padding:2.5rem;">
+        <div style="font-size:2.5rem;margin-bottom:1.5rem;">🦅</div>
+        <p style="color:var(--lgray);line-height:1.9;margin-bottom:2rem;">
+          Aeternum aún no está en activo — el juego no ha salido. Pero si quieres ser parte
+          desde el inicio, deja tu expresión de interés. Te contactamos cuando llegue el momento.
+        </p>
+        <a href="index.html#reclutamiento" class="btn" style="background:var(--aeter-cyan);color:#000;font-family:'Cinzel',serif;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;padding:0.65rem 1.6rem;border-radius:10px;">
+          Expresar interés
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:rgba(1,5,12,0.96);padding:3rem 2rem 2rem;text-align:center;border-top:1px solid rgba(72,202,228,0.08);">
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.8rem;margin-bottom:0.4rem;">
+      <img src="assets/Logo-aeternum.svg" style="width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(72,202,228,0.5));" alt="">
+      <div style="font-family:'Cinzel',serif;font-size:1.6rem;letter-spacing:0.25em;
+           background:linear-gradient(90deg,#48CAE4,#F4A82A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        AETERNUM
+      </div>
+    </div>
+    <div style="font-size:0.65rem;letter-spacing:0.35em;color:rgba(72,202,228,0.35);margin-bottom:2rem;">
+      CASA ALIADA DE OBLIVION
+    </div>
+    <a href="index.html" class="aeter-footer-back">← Volver a la Casa Oblivion</a>
+    <div style="font-size:0.68rem;color:rgba(100,120,140,0.4);margin-top:1.5rem;">&copy; 2026 Aeternum · Familia Oblivion</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Spark colors adaptadas para Aeternum (cyan + gold)
+    // Override del sistema de chispas para usar colores Aeternum
+    document.addEventListener('DOMContentLoaded', () => {
+      // Ajustar canvas al título Aeternum
+      const titleEl = document.getElementById('aeterTitle');
+      const canvas  = document.getElementById('aeterSparkCanvas');
+      if (!canvas || !titleEl) return;
+      const ctx = canvas.getContext('2d');
+      const sparks = [];
+
+      function resizeCanvas() {
+        const r = titleEl.getBoundingClientRect();
+        canvas.width  = r.width;
+        canvas.height = r.height;
+      }
+      setTimeout(resizeCanvas, 500);
+      window.addEventListener('resize', resizeCanvas);
+
+      function createSpark(x, y, isBurst) {
+        const colors = ['rgba(72,202,228,','rgba(173,232,244,','rgba(244,168,42,','rgba(255,255,255,'];
+        const col = colors[Math.floor(Math.random() * colors.length)];
+        const angle = Math.random() * Math.PI * 2;
+        const speed = isBurst ? (Math.random()*80+30) : (Math.random()*50+15);
+        const life = Math.random()*600+(isBurst?300:400);
+        sparks.push({
+          x, y,
+          vx: Math.cos(angle)*speed*0.001,
+          vy: Math.sin(angle)*speed*0.001 - 0.03,
+          size: Math.random()*2.5+0.8,
+          col, life, maxLife: life,
+          gravity: 0.00003+Math.random()*0.00002,
+        });
+      }
+
+      function burstAeter(letter, count=5) {
+        const tr = titleEl.getBoundingClientRect();
+        const lr = letter.getBoundingClientRect();
+        for (let i=0; i<count; i++) {
+          createSpark(lr.left-tr.left+Math.random()*lr.width, lr.top-tr.top+Math.random()*lr.height, true);
+        }
+      }
+
+      // Auto sparks
+      setInterval(() => {
+        const letters = document.querySelectorAll('.aeter-letter');
+        if (Math.random()<0.65 && letters.length) {
+          const l = letters[Math.floor(Math.random()*letters.length)];
+          burstAeter(l, Math.floor(Math.random()*3)+1);
+        }
+      }, 1800);
+
+      // Hover sparks
+      document.querySelectorAll('.aeter-letter').forEach(l => {
+        l.addEventListener('mouseenter', () => {
+          l.style.transform = 'translateY(-6px) scale(1.08)';
+          l.style.filter = 'drop-shadow(0 0 25px rgba(72,202,228,0.9))';
+          burstAeter(l, 6);
+        });
+        l.addEventListener('mouseleave', () => {
+          l.style.transform = '';
+          l.style.filter = '';
+        });
+      });
+
+      // Draw loop
+      let last = 0;
+      function animate(ts) {
+        const dt = ts - last; last = ts;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i=sparks.length-1; i>=0; i--) {
+          const s = sparks[i];
+          s.life -= dt;
+          if (s.life <= 0) { sparks.splice(i,1); continue; }
+          const p = 1 - s.life/s.maxLife;
+          s.x += s.vx*dt; s.y += s.vy*dt; s.vy += s.gravity*dt;
+          const alpha = Math.pow(1-p, 0.8);
+          const sz = s.size*(1-p*0.5);
+          ctx.beginPath(); ctx.arc(s.x,s.y,sz*2.5,0,Math.PI*2);
+          ctx.fillStyle = s.col+(alpha*0.15)+')'; ctx.fill();
+          ctx.beginPath(); ctx.arc(s.x,s.y,sz,0,Math.PI*2);
+          ctx.fillStyle = s.col+alpha+')'; ctx.fill();
+          if (sz>1.2) {
+            ctx.beginPath(); ctx.arc(s.x,s.y,sz*0.4,0,Math.PI*2);
+            ctx.fillStyle = `rgba(255,255,255,${alpha*0.9})`; ctx.fill();
+          }
+        }
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    });
+  </script>
+</body>
+</html>

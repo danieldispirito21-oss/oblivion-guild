@@ -880,6 +880,16 @@ footer {
 }
 
 /* Divisor de relación (la línea entre las dos casas) */
+/* "Ver Casa →" hover glow en Aeternum */
+a.casa-card.aeternum-house .casa-status {
+  transition: all 0.3s ease;
+}
+a.casa-card.aeternum-house:hover .casa-status {
+  background: rgba(72,202,228,0.18);
+  border-color: rgba(72,202,228,0.55);
+  box-shadow: 0 0 14px rgba(72,202,228,0.25);
+}
+
 .casas-relation {
   display: flex; align-items: center; justify-content: center;
   gap: 1rem; margin: 0 auto 3rem; max-width: 700px;
