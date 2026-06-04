@@ -275,7 +275,8 @@ section::before {
   display:flex; justify-content:center; align-items:baseline;
   flex-wrap:nowrap; gap:0.02em;
   margin-bottom:0.5rem;
-  filter: drop-shadow(0 0 60px rgba(201,168,76,0.25));
+  filter: drop-shadow(0 0 60px rgba(201,168,76,0.2));
+  position: relative;
 }
 
 .hero-letter {
@@ -297,7 +298,32 @@ section::before {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: letterIn 0.9s calc(var(--i,0) * 0.07s) cubic-bezier(.2,1.2,.4,1) both;
-  position:relative;
+  position: relative;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+/* Letras de borde (O inicial y N final) — toque neon muy sutil */
+.hero-letter:first-child,
+.hero-letter:last-child {
+  filter: drop-shadow(0 0 8px rgba(80,200,255,0.25)) drop-shadow(0 0 2px rgba(80,200,255,0.15));
+  animation: letterIn 0.9s calc(var(--i,0) * 0.07s) cubic-bezier(.2,1.2,.4,1) both,
+             neonEdgePulse 4s 2s ease-in-out infinite;
+}
+
+/* Neon pulse muy sutil solo en letras de borde */
+@keyframes neonEdgePulse {
+  0%,100% { filter: drop-shadow(0 0 8px rgba(80,200,255,0.22)) drop-shadow(0 0 2px rgba(80,200,255,0.12)); }
+  50%      { filter: drop-shadow(0 0 14px rgba(80,200,255,0.4)) drop-shadow(0 0 4px rgba(80,200,255,0.25)); }
+}
+
+/* Canvas de chispas — overlay sobre el título */
+#sparkCanvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  overflow: visible;
 }
 
 

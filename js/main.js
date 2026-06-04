@@ -345,17 +345,136 @@ sb.from('content_guides').select('*').order('sort_order').then(({ data }) => {
     grid.querySelectorAll('.reveal').forEach(el => io.observe(el));
   });
 
-// ── HERO TITLE: periodic shimmer ──
-// The CSS handles the shimmer via ::after on .hero-title-wrap.
-// Add a subtle hover scale per letter
+// ── HERO TITLE: hover + SPARKS ──
 document.querySelectorAll('.hero-letter').forEach(letter => {
   letter.addEventListener('mouseenter', () => {
-    letter.style.transition = 'filter 0.3s ease, transform 0.3s ease';
     letter.style.transform = 'translateY(-6px) scale(1.08)';
     letter.style.filter = 'drop-shadow(0 0 30px rgba(240,210,100,0.9))';
+    // Burst de chispas al hacer hover
+    burstSparks(letter, 6);
   });
   letter.addEventListener('mouseleave', () => {
     letter.style.transform = '';
     letter.style.filter = '';
   });
 });
+
+// ── SISTEMA DE CHISPAS ──
+(function () {
+  const canvas = document.getElementById('sparkCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const sparks = [];
+
+  // Ajustar canvas al tamaño del título
+  function resizeCanvas() {
+    const title = document.getElementById('heroTitle');
+    if (!title) return;
+    const rect = title.getBoundingClientRect();
+    canvas.width  = rect.width;
+    canvas.height = rect.height;
+    canvas.style.left = '0px';
+    canvas.style.top  = '0px';
+  }
+  setTimeout(resizeCanvas, 500);
+  window.addEventListener('resize', resizeCanvas);
+
+  // Crear chispa individual
+  function createSpark(x, y, isBurst = false) {
+    const colors = [
+      'rgba(255,240,140,',  // oro cálido
+      'rgba(255,255,220,',  // blanco cálido
+      'rgba(140,220,255,',  // cyan eléctrico (neon)
+      'rgba(255,200,80,',   // naranja-oro
+    ];
+    const colorBase = colors[Math.floor(Math.random() * colors.length)];
+    const angle  = Math.random() * Math.PI * 2;
+    const speed  = isBurst ? (Math.random() * 80 + 30) : (Math.random() * 50 + 15);
+    const size   = Math.random() * 2.5 + 0.8;
+    const life   = Math.random() * 600 + (isBurst ? 300 : 400);
+
+    sparks.push({
+      x, y,
+      vx: Math.cos(angle) * speed * 0.001,
+      vy: Math.sin(angle) * speed * 0.001 - 0.03, // tendencia hacia arriba
+      size,
+      colorBase,
+      alpha: 1,
+      life,
+      maxLife: life,
+      gravity: 0.00003 + Math.random() * 0.00002,
+    });
+  }
+
+  // Burst de chispas desde una letra
+  function burstSparks(letter, count = 5) {
+    const titleRect  = document.getElementById('heroTitle')?.getBoundingClientRect();
+    const letterRect = letter.getBoundingClientRect();
+    if (!titleRect) return;
+    const offsetX = letterRect.left - titleRect.left;
+    const offsetY = letterRect.top  - titleRect.top;
+    for (let i = 0; i < count; i++) {
+      const x = offsetX + Math.random() * letterRect.width;
+      const y = offsetY + Math.random() * letterRect.height;
+      createSpark(x, y, true);
+    }
+  }
+  window.burstSparks = burstSparks;
+
+  // Chispas automáticas periódicas (muy ocasionales)
+  function autoSpark() {
+    const letters = document.querySelectorAll('.hero-letter');
+    if (!letters.length) return;
+    if (Math.random() < 0.5) { // 50% de probabilidad en cada tick
+      const letter = letters[Math.floor(Math.random() * letters.length)];
+      burstSparks(letter, Math.floor(Math.random() * 3) + 1); // 1-3 chispas
+    }
+  }
+  // Cada 1.8s promedio una chispa automática (no constante)
+  setInterval(() => { if (Math.random() < 0.65) autoSpark(); }, 1800);
+
+  // Loop de animación
+  let lastTime = 0;
+  function animate(timestamp) {
+    const dt = timestamp - lastTime;
+    lastTime = timestamp;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const s = sparks[i];
+      s.life -= dt;
+      if (s.life <= 0) { sparks.splice(i, 1); continue; }
+
+      const progress = 1 - s.life / s.maxLife;
+      s.x  += s.vx * dt;
+      s.y  += s.vy * dt;
+      s.vy += s.gravity * dt; // gravedad suave
+
+      const alpha = Math.pow(1 - progress, 0.8);
+      const size  = s.size * (1 - progress * 0.5);
+
+      // Glow exterior
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, size * 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = s.colorBase + (alpha * 0.15) + ')';
+      ctx.fill();
+
+      // Núcleo de la chispa
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, size, 0, Math.PI * 2);
+      ctx.fillStyle = s.colorBase + alpha + ')';
+      ctx.fill();
+
+      // Brillo central puro
+      if (size > 1.2) {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, size * 0.4, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${alpha * 0.9})`;
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+})();
