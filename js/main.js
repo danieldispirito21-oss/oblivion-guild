@@ -345,6 +345,20 @@ sb.from('content_guides').select('*').order('sort_order').then(({ data }) => {
     grid.querySelectorAll('.reveal').forEach(el => io.observe(el));
   });
 
+// ── MANGA: botón "Continuar leyendo" ──
+(function() {
+  const btn = document.getElementById('btnContinueManga');
+  if (!btn) return;
+  try {
+    const prog = JSON.parse(localStorage.getItem('oblivion_manga_progress') || 'null');
+    if (prog && prog.page > 0) {
+      btn.textContent = `Continuar — Pág. ${prog.page + 1} →`;
+      btn.href = `reader.html?ch=${prog.chId}&p=${prog.page + 1}`;
+      btn.style.background = '#C9A84C';
+    }
+  } catch(e) {}
+})();
+
 // ── HERO TITLE: hover + SPARKS ──
 document.querySelectorAll('.hero-letter').forEach(letter => {
   letter.addEventListener('mouseenter', () => {

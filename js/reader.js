@@ -3,6 +3,35 @@ let currentChapter = null;
 let currentPage = 0;
 let totalPages = 0;
 
+// ── PROGRESO DE LECTURA ──
+const PROG_KEY = 'oblivion_manga_progress';
+
+function saveProgress(chId, page) {
+  // Guardar en localStorage (funciona para todos)
+  localStorage.setItem(PROG_KEY, JSON.stringify({
+    chId, page, ts: Date.now(),
+    chTitle: currentChapter?.title || ''
+  }));
+  // Guardar en Supabase si está logueado
+  if (typeof sb !== 'undefined' && typeof Auth !== 'undefined' && Auth.session) {
+    sb.from('reading_progress').upsert({
+      user_id:    Auth.session.user.id,
+      manga:      'oblivion',
+      chapter_id: chId,
+      page:       page
+    }, { onConflict: 'user_id,manga' }).catch(() => {});
+  }
+}
+
+function getProgress() {
+  try { return JSON.parse(localStorage.getItem(PROG_KEY) || 'null'); }
+  catch { return null; }
+}
+
+function clearProgress() {
+  localStorage.removeItem(PROG_KEY);
+}
+
 const img      = document.getElementById('readerImg');
 const imgWrap  = document.getElementById('imgWrap');
 const counter  = document.getElementById('pageCounter');
@@ -164,26 +193,60 @@ fetch('data/chapters.json')
   .then(r => r.json())
   .then(data => {
     chapters = data.chapters;
-    // Populate chapter selector
     chapters.forEach(ch => {
       const opt = document.createElement('option');
       opt.value = ch.id;
       opt.textContent = `Cap. ${ch.number} — ${ch.title}`;
       chSel.appendChild(opt);
     });
-    // Load chapter from URL param
-    const params = new URLSearchParams(location.search);
-    const chId = parseInt(params.get('ch')) || 1;
-    loadChapter(chId);
+
+    const params   = new URLSearchParams(location.search);
+    const urlCh    = parseInt(params.get('ch'));
+    const urlPage  = parseInt(params.get('p')) - 1 || 0;
+    const saved    = getProgress();
+
+    // Si viene con URL específica (enlace directo)
+    if (urlCh) {
+      loadChapter(urlCh, urlPage);
+      return;
+    }
+
+    // Si tiene progreso guardado → ofrecer continuar
+    if (saved && saved.chId && saved.page > 0) {
+      showContinuePrompt(saved);
+    } else {
+      loadChapter(1, 0);
+    }
   });
 
-function loadChapter(id) {
+function showContinuePrompt(saved) {
+  const overlay = document.getElementById('continueOverlay');
+  const msg     = document.getElementById('continueMsg');
+  if (!overlay || !msg) { loadChapter(saved.chId, saved.page); return; }
+
+  const chObj = chapters.find(c => c.id === saved.chId);
+  const pageLabel = `Cap. ${chObj?.number || saved.chId} · Página ${saved.page + 1}`;
+  msg.textContent = pageLabel;
+  overlay.style.display = 'flex';
+
+  document.getElementById('btnContinue').onclick = () => {
+    overlay.style.display = 'none';
+    loadChapter(saved.chId, saved.page);
+  };
+  document.getElementById('btnStartOver').onclick = () => {
+    overlay.style.display = 'none';
+    clearProgress();
+    loadChapter(1, 0);
+  };
+}
+
+function loadChapter(id, startPage = 0) {
   currentChapter = chapters.find(c => c.id === id) || chapters[0];
   chSel.value = currentChapter.id;
   chTitle.textContent = `Cap. ${currentChapter.number} — ${currentChapter.title}`;
   totalPages = currentChapter.pages;
   buildThumbs();
-  goToPage(0);
+  goToPage(startPage);
 }
 
 function buildThumbs() {
@@ -200,23 +263,34 @@ function buildThumbs() {
 function goToPage(n) {
   n = Math.max(0, Math.min(n, totalPages - 1));
   currentPage = n;
-  // Reset zoom al cambiar página
   resetZoom();
   const src = `manga/${currentChapter.folder}/${String(n+1).padStart(2,'0')}.png`;
   img.style.opacity = '0';
   img.src = src;
   img.onload = () => { img.style.transition = 'opacity 0.2s'; img.style.opacity = '1'; };
   counter.textContent = `${n + 1} / ${totalPages}`;
-  btnPrev.disabled = n === 0;
-  btnNext.disabled = n === totalPages - 1;
-  // Update thumbs
   thumbs.querySelectorAll('.reader-thumb').forEach((t, i) => t.classList.toggle('active', i === n));
-  // Scroll active thumb into view
-  thumbs.querySelectorAll('.reader-thumb')[n]?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
-  // Scroll page to top
+  thumbs.querySelectorAll('.reader-thumb')[n]?.scrollIntoView({ inline:'center', block:'nearest', behavior:'smooth' });
   document.querySelector('.reader-main').scrollTop = 0;
-  // Update URL
   history.replaceState(null, '', `?ch=${currentChapter.id}&p=${n+1}`);
+
+  // ── Guardar progreso ──
+  saveProgress(currentChapter.id, n);
+
+  // ── Última página → mostrar botón siguiente capítulo ──
+  const isLast = n === totalPages - 1;
+  btnPrev.disabled = n === 0;
+
+  const nextCh = chapters.find(c => c.id === currentChapter.id + 1);
+  if (isLast && nextCh) {
+    btnNext.textContent = `Cap. ${nextCh.number}: ${nextCh.title} →`;
+    btnNext.onclick = () => { loadChapter(nextCh.id, 0); btnNext.textContent = 'Siguiente →'; btnNext.onclick = () => goToPage(currentPage + 1); };
+    btnNext.disabled = false;
+  } else {
+    btnNext.textContent = 'Siguiente →';
+    btnNext.onclick = () => goToPage(currentPage + 1);
+    btnNext.disabled = isLast;
+  }
 }
 
 // ── CONTROLS ──

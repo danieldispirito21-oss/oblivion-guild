@@ -48,6 +48,34 @@
   <!-- THUMBNAIL STRIP -->
   <div class="reader-thumbs" id="thumbStrip"></div>
 
+  <!-- OVERLAY: ¿Continuar donde lo dejaste? -->
+  <div id="continueOverlay" style="display:none;position:fixed;inset:0;z-index:500;
+       background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);
+       display:none;align-items:center;justify-content:center;">
+    <div style="background:#06060F;border:1px solid rgba(201,168,76,0.25);border-radius:14px;
+         padding:2.5rem;text-align:center;max-width:380px;width:90%;">
+      <div style="font-size:2rem;margin-bottom:1rem;">📖</div>
+      <div style="font-family:'Cinzel',serif;font-size:1rem;color:#EDE8E0;margin-bottom:0.5rem;">
+        ¿Continuar leyendo?
+      </div>
+      <div style="font-size:0.82rem;color:#C9A84C;margin-bottom:1.5rem;" id="continueMsg">
+        Cargando...
+      </div>
+      <div style="display:flex;gap:0.8rem;justify-content:center;">
+        <button id="btnStartOver" style="padding:0.55rem 1.2rem;background:rgba(255,255,255,0.06);
+                border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#888899;
+                font-size:0.78rem;cursor:pointer;">
+          Desde el inicio
+        </button>
+        <button id="btnContinue" style="padding:0.55rem 1.4rem;background:#C9A84C;
+                border:none;border-radius:8px;color:#000;font-family:'Cinzel',serif;
+                font-size:0.78rem;font-weight:700;letter-spacing:0.08em;cursor:pointer;">
+          Continuar →
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/reader.js"></script>
 </body>
 </html>
