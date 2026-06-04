@@ -1,0 +1,87 @@
+<svg viewBox="0 0 320 210" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradiente principal: cyan → azul profundo → morado → naranja-oro -->
+    <linearGradient id="aGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%"   stop-color="#48CAE4"/>
+      <stop offset="22%"  stop-color="#4361EE"/>
+      <stop offset="50%"  stop-color="#7B2FBE"/>
+      <stop offset="78%"  stop-color="#E87820"/>
+      <stop offset="100%" stop-color="#F4A82A"/>
+    </linearGradient>
+    <!-- Gradiente ala izquierda (cyan) -->
+    <linearGradient id="wL" x1="100%" y1="50%" x2="0%" y2="40%">
+      <stop offset="0%"   stop-color="#4361EE"/>
+      <stop offset="100%" stop-color="#48CAE4" stop-opacity="0.2"/>
+    </linearGradient>
+    <!-- Gradiente ala derecha (gold) -->
+    <linearGradient id="wR" x1="0%" y1="50%" x2="100%" y2="40%">
+      <stop offset="0%"   stop-color="#E87820"/>
+      <stop offset="100%" stop-color="#F4A82A" stop-opacity="0.2"/>
+    </linearGradient>
+    <!-- Glow suave -->
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <!-- Glow fuerte -->
+    <filter id="glowS" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- ── OLAS EXTERIORES (halo del símbolo) ── -->
+  <path d="M160,100
+    C155,70 138,52 118,58 C96,64 84,82 84,100
+    C84,118 96,136 118,142 C138,148 155,130 160,100
+    C165,70 182,52 202,58 C224,64 236,82 236,100
+    C236,118 224,136 202,142 C182,148 165,130 160,100 Z"
+    fill="none" stroke="url(#aGrad)" stroke-width="10"
+    stroke-linecap="round" filter="url(#glowS)" opacity="0.3"/>
+
+  <!-- ── INFINITO PRINCIPAL ── -->
+  <path d="M160,100
+    C155,72 140,56 120,62 C100,68 90,84 90,100
+    C90,116 100,132 120,138 C140,144 155,128 160,100
+    C165,72 180,56 200,62 C220,68 230,84 230,100
+    C230,116 220,132 200,138 C180,144 165,128 160,100 Z"
+    fill="none" stroke="url(#aGrad)" stroke-width="5"
+    stroke-linecap="round" filter="url(#glow)"/>
+
+  <!-- ── PUNTO DE CRUCE (centro) ── -->
+  <circle cx="160" cy="100" r="5.5" fill="url(#aGrad)" filter="url(#glow)"/>
+  <circle cx="160" cy="100" r="2.5" fill="white" opacity="0.9"/>
+
+  <!-- ── ALA IZQUIERDA ── -->
+  <g stroke="url(#wL)" stroke-linecap="round" fill="none" filter="url(#glow)">
+    <!-- Plumas superiores -->
+    <path d="M89,96 C72,87 55,82 34,86" stroke-width="2.8"/>
+    <path d="M90,89 C76,74 64,62 46,58" stroke-width="2.4"/>
+    <path d="M92,83 C82,66 74,52 60,45" stroke-width="2.1"/>
+    <path d="M95,77 C88,62 84,47 75,37" stroke-width="1.8"/>
+    <path d="M99,73 C94,58 93,44 86,33" stroke-width="1.5"/>
+    <!-- Pluma base inferior -->
+    <path d="M89,104 C72,108 54,112 34,109" stroke-width="2.4" opacity="0.75"/>
+    <path d="M90,111 C74,118 59,122 42,118" stroke-width="2" opacity="0.5"/>
+  </g>
+
+  <!-- ── ALA DERECHA ── -->
+  <g stroke="url(#wR)" stroke-linecap="round" fill="none" filter="url(#glow)">
+    <path d="M231,96 C248,87 265,82 286,86" stroke-width="2.8"/>
+    <path d="M230,89 C244,74 256,62 274,58" stroke-width="2.4"/>
+    <path d="M228,83 C238,66 246,52 260,45" stroke-width="2.1"/>
+    <path d="M225,77 C232,62 236,47 245,37" stroke-width="1.8"/>
+    <path d="M221,73 C226,58 227,44 234,33" stroke-width="1.5"/>
+    <path d="M231,104 C248,108 266,112 286,109" stroke-width="2.4" opacity="0.75"/>
+    <path d="M230,111 C246,118 261,122 278,118" stroke-width="2" opacity="0.5"/>
+  </g>
+
+  <!-- ── CÍRCULO DE RUNAS (sutil) ── -->
+  <circle cx="160" cy="100" r="90" fill="none"
+          stroke="rgba(72,202,228,0.12)" stroke-width="0.8" stroke-dasharray="4,3"/>
+  <!-- Marcas de puntos cardinales -->
+  <circle cx="160" cy="10"  r="2" fill="rgba(72,202,228,0.4)"/>
+  <circle cx="160" cy="190" r="2" fill="rgba(244,168,42,0.4)"/>
+  <circle cx="70"  cy="100" r="2" fill="rgba(72,202,228,0.3)"/>
+  <circle cx="250" cy="100" r="2" fill="rgba(244,168,42,0.3)"/>
+</svg>

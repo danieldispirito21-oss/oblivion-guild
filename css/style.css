@@ -741,6 +741,160 @@ footer {
 .lightbox-prev { left:-56px; }
 .lightbox-next { right:-56px; }
 
+/* ── CASAS / FAMILIA OBLIVION ── */
+#casas { }
+
+.casas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Card base */
+.casa-card {
+  position: relative; overflow: hidden;
+  border-radius: 16px; padding: 3rem 2rem;
+  text-align: center;
+  transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease);
+}
+.casa-card:hover { transform: translateY(-7px); }
+
+/* ── OBLIVION (casa principal) ── */
+.main-house {
+  background: linear-gradient(145deg, #0d0818, #040410);
+  border: 1px solid rgba(201,168,76,0.18);
+}
+.main-house:hover {
+  box-shadow: 0 24px 70px rgba(201,168,76,0.12);
+  border-color: rgba(201,168,76,0.4);
+}
+
+/* ── AETERNUM (sub-casa) ── */
+.aeternum-house {
+  background: linear-gradient(145deg, #010B18, #020E22, #010C1A);
+  border: 1px solid rgba(72,202,228,0.18);
+}
+.aeternum-house:hover {
+  box-shadow: 0 24px 70px rgba(72,202,228,0.1), 0 0 50px rgba(244,168,42,0.06);
+  border-color: rgba(72,202,228,0.45);
+}
+
+/* Círculo de constelaciones (fondo Aeternum) */
+.aeternum-bg-circle {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none; z-index: 0;
+}
+.aeternum-bg-circle svg { opacity: 0.4; }
+
+/* Brillo de gradiente en la esquina */
+.aeternum-house::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(ellipse at top right, rgba(72,202,228,0.07), transparent 65%);
+  pointer-events: none;
+}
+.aeternum-house::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(ellipse at bottom left, rgba(244,168,42,0.06), transparent 65%);
+  pointer-events: none;
+}
+
+/* Logos */
+.casa-logo {
+  width: 130px; height: 130px; object-fit: contain;
+  margin: 0 auto 1.5rem; display: block;
+  position: relative; z-index: 1;
+}
+.main-house .casa-logo {
+  filter: drop-shadow(0 0 16px rgba(0,153,238,0.5)) drop-shadow(0 0 5px rgba(201,168,76,0.3));
+}
+.aeternum-house .casa-logo {
+  filter: drop-shadow(0 0 20px rgba(72,202,228,0.55)) drop-shadow(0 0 40px rgba(244,168,42,0.2));
+  animation: aeterFloat 5s ease-in-out infinite;
+}
+@keyframes aeterFloat {
+  0%,100% { transform: translateY(0); filter: drop-shadow(0 0 20px rgba(72,202,228,0.55)) drop-shadow(0 0 40px rgba(244,168,42,0.2)); }
+  50%      { transform: translateY(-8px); filter: drop-shadow(0 0 30px rgba(72,202,228,0.8)) drop-shadow(0 0 55px rgba(244,168,42,0.3)); }
+}
+
+/* Badges */
+.casa-badge {
+  display: inline-block; position: relative; z-index: 1;
+  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+  padding: 0.22rem 0.75rem; border-radius: 20px; margin-bottom: 1rem;
+  background: rgba(201,168,76,0.1); color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.22);
+}
+.aeternum-badge {
+  background: linear-gradient(90deg, rgba(72,202,228,0.08), rgba(244,168,42,0.08));
+  color: #48CAE4; border: 1px solid rgba(72,202,228,0.28);
+}
+
+/* Nombres */
+.casa-name {
+  font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 900;
+  margin-bottom: 0.4rem; position: relative; z-index: 1;
+}
+.main-house .casa-name { color: var(--white); }
+.aeternum-house .casa-name {
+  background: linear-gradient(90deg, #48CAE4 0%, #ADE8F4 40%, #F4A82A 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: drop-shadow(0 0 16px rgba(72,202,228,0.3));
+}
+
+/* Juego/contexto */
+.casa-game {
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 1rem; position: relative; z-index: 1;
+}
+.main-house .casa-game { color: var(--gray); }
+.aeternum-house .casa-game { color: rgba(72,202,228,0.55); }
+
+/* Descripción */
+.casa-desc {
+  font-size: 0.88rem; color: var(--lgray); line-height: 1.75;
+  margin-bottom: 1.5rem; position: relative; z-index: 1;
+}
+
+/* Status pill */
+.casa-status {
+  display: inline-block; font-size: 0.68rem; letter-spacing: 0.14em;
+  text-transform: uppercase; padding: 0.32rem 0.9rem; border-radius: 20px;
+  position: relative; z-index: 1;
+}
+.casa-status.legacy    { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.28); }
+.casa-status.incoming  {
+  background: linear-gradient(90deg, rgba(72,202,228,0.1), rgba(244,168,42,0.08));
+  color: #48CAE4; border: 1px solid rgba(72,202,228,0.3);
+  animation: aeterStatusPulse 3s ease infinite;
+}
+@keyframes aeterStatusPulse {
+  0%,100% { border-color: rgba(72,202,228,0.3); color: #48CAE4; }
+  50%      { border-color: rgba(72,202,228,0.6); color: #ADE8F4; box-shadow: 0 0 10px rgba(72,202,228,0.2); }
+}
+
+/* Divisor de relación (la línea entre las dos casas) */
+.casas-relation {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1rem; margin: 0 auto 3rem; max-width: 700px;
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gray);
+}
+.casas-relation::before, .casas-relation::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201,168,76,0.2), rgba(72,202,228,0.2), transparent);
+}
+
+@media (max-width: 768px) {
+  .casas-grid { grid-template-columns: 1fr; }
+}
+
 /* ── MIEMBROS ── */
 #miembros { }
 
